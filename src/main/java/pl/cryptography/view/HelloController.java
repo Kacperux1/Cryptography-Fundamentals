@@ -1,4 +1,4 @@
-package pl.cryptography;
+package pl.cryptography.view;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

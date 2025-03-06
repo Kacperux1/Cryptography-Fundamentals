@@ -1,4 +1,4 @@
-package pl.cryptography;
+package pl.cryptography.view;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
