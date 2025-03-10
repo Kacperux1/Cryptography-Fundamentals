@@ -2,6 +2,7 @@ package pl.cryptography.view;
 
 public class Main {
     public static void main(String[] args) {
+
         byte key[] = {(byte) 0xAA, (byte) 0xBB, (byte) 0xCC, (byte) 0xDD,
                 (byte) 0xEE, (byte) 0xFF, (byte) 0x11, (byte) 0x22,
                 (byte) 0x33, (byte) 0x44, (byte) 0x55, (byte) 0x66,
@@ -23,7 +24,8 @@ public class Main {
         System.out.println();
         System.out.println();
 
-        byte [][] expandedKey = aes.generateKey(key);
+        byte[][] expandedKey = aes.expandKey(key);
+
         for (byte[] row : expandedKey) {
             for (byte b : row) {
                 // Wydrukowanie każdego bajtu w formacie HEX (z dużymi literami)
