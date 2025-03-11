@@ -6,6 +6,31 @@ import pl.cryptography.view.AES;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class AESTest {
+    private AES aes = new AES();
+
+    @Test
+    public void subBytesTest() {
+        byte[][] blok = {{(byte) 0x19, (byte) 0xa0, (byte) 0x9a, (byte) 0xe9},
+                         {(byte) 0x3d, (byte) 0xf4, (byte) 0xc6, (byte) 0xf8},
+                         {(byte) 0xe3, (byte) 0xe2, (byte) 0x8d, (byte) 0x48},
+                         {(byte) 0xbe, (byte) 0x2b, (byte) 0x2a, (byte) 0x08}};
+
+
+        byte[][] anticipated = {
+                {(byte) 0xd4, (byte) 0xe0, (byte) 0xb8, (byte) 0x1e},
+                {(byte) 0x27, (byte) 0xbf, (byte) 0xb4, (byte) 0x41},
+                {(byte) 0x11, (byte) 0x98, (byte) 0x5d, (byte) 0x52},
+                {(byte) 0xae, (byte) 0xf1, (byte) 0xe5, (byte) 0x30}};
+
+        byte[][] effect = aes.subBytes(blok);
+        for(int i = 0; i<4; i++){
+            for(int j = 0; j<4; j++){
+                assertEquals((anticipated[i][j] & 0xFF), (effect[i][j] & 0xFF));
+            }
+        }
+    }
+
+
 
     @Test
     public void mixColumsTest(){
@@ -23,7 +48,6 @@ public class AESTest {
                 {(byte) 0xed, (byte) 0xa5, (byte) 0xa6, (byte) 0xbc}
         };
 
-        AES aes = new AES();
         byte[][] after = aes.mixColumns(origin);
 
         for(int i=0; i<4; i++){
@@ -36,7 +60,6 @@ public class AESTest {
 
     @Test
     public void fMulTest(){
-        AES aes = new AES();
         byte a = (byte) 0x57;
         byte b = (byte) 0x83;
 
@@ -56,7 +79,6 @@ public class AESTest {
                           {(byte) 0x55, (byte) 0x66, (byte) 0x33, (byte) 0x44},
                           {(byte) 0x00, (byte) 0x77, (byte) 0x88, (byte) 0x99}};
 
-        AES aes = new AES();
         blok = aes.shiftRows(blok);
 
         for(int i = 0; i < 4; i++){
@@ -68,7 +90,6 @@ public class AESTest {
 
     @Test
     public void subRowTest() {
-        AES aes = new AES();
         byte[] row = {(byte) 0x00, (byte) 0x01, (byte) 0xFF, (byte) 0xFE};
 
         byte[] row2 = aes.subRow(row);
@@ -83,7 +104,6 @@ public class AESTest {
 
     @Test
     public void gTest() {
-        AES aes = new AES();
         byte[] row = {(byte) 0x00, (byte) 0x01, (byte) 0xFF, (byte) 0xFE};
 
         byte[] row2 = aes.g(row, 1);
@@ -149,7 +169,6 @@ public class AESTest {
                 {(byte) 0x4F, (byte) 0xD4, (byte) 0x8C, (byte) 0xE9}
         };
 
-        AES aes = new AES();
 
         int Nk = key.length / 4;
         int Nr = Nk + 6;

@@ -85,9 +85,15 @@ public class AES {
         return null;
     }*/
 
+    public byte[][] subBytes(byte[][] state){
+        for(int i=0; i<dimensions; i++){
+            state[i] = subRow(state[i]);
+        }
+        return state;
+    }
+
     public byte[][] shiftRows(byte[][] state){
         byte[] temp = new byte[dimensions];
-
         for(int i=1; i<dimensions; i++){
             for(int j=0; j<dimensions; j++){
                 temp[j] = state[i][(j+i) % dimensions];
@@ -228,7 +234,7 @@ public class AES {
 
     public byte[] subRow(byte[] row){
         byte[] temp = new byte[row.length];
-        for(int i = 0; i < dimensions; i++){
+        for(int i = 0; i < row.length; i++){
             //podmieniamy caly wiersz naraz
             //Wartosc danego bajtu staje sie indexem spod ktorego bierzemy wartosc do podmiany
             //Zapis &0xFF sprawia ze wartosc bajtu na pewno zostanie odczytana jako dodatnia
