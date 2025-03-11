@@ -1,7 +1,7 @@
 package pl.cryptography.view;
 
 public class AES {
-    final private int wymiary = 4; //Nb - liczba kolumn w stanie, czyli tak w zasadzie wymiary bloku
+    final private int dimensions = 4; //Nb - liczba kolumn w stanie, czyli tak w zasadzie dimensions bloku
     private int numOfRounds, numOfWords; //Nr - Liczba rund  //Nk - liczba słów w kluczu
     private byte[][] mainKey; //Klucz główny (czyli już po expansji)
 
@@ -61,6 +61,11 @@ public class AES {
             (byte)0x20, (byte)0x40, (byte)0x80, (byte)0x1b, (byte)0x36
     };
 
+    private final byte[][] mixColumnMatrix = {{(byte) 0x02, (byte) 0x03, (byte) 0x01, (byte) 0x01},
+                                              {(byte) 0x01, (byte) 0x02, (byte) 0x03, (byte) 0x01},
+                                              {(byte) 0x01, (byte) 0x01, (byte) 0x02, (byte) 0x03},
+                                              {(byte) 0x03, (byte) 0x01, (byte) 0x01, (byte) 0x02}};
+
     public void setNr(int nr) {
         numOfRounds = nr;
     }
@@ -69,13 +74,93 @@ public class AES {
         numOfWords = nk;
     }
 
+/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// SZYFROWANIE /////////////////////////////////////
+
+    /*public byte[] zaszyfruj(byte[] message, byte[] key){
+        numOfWords = key.length/4;
+        numOfRounds = numOfWords+6;
+
+        mainKey = expandKey(key);
+        return null;
+    }*/
+
+    public byte[][] subBytes(byte[][] state){
+        for(int i=0; i<dimensions; i++){
+            state[i] = subRow(state[i]);
+        }
+        return state;
+    }
+
+    public byte[][] shiftRows(byte[][] state){
+        byte[] temp = new byte[dimensions];
+        for(int i=1; i<dimensions; i++){
+            for(int j=0; j<dimensions; j++){
+                temp[j] = state[i][(j+i) % dimensions];
+            }
+
+            for(int j=0; j<dimensions; j++){
+                state[i][j] = temp[j];
+            }
+        }
+
+        return state;
+    }
+
+    public byte[][] mixColumns(byte[][] state){
+        byte[] temp = new byte[4];
+        for(int i = 0; i < dimensions; i++){
+            for(int j = 0; j < dimensions; j++){
+                temp[j] = (byte) (fMul(state[0][i], mixColumnMatrix[j][0]) ^
+                                  fMul(state[1][i], mixColumnMatrix[j][1]) ^
+                                  fMul(state[2][i], mixColumnMatrix[j][2]) ^
+                                  fMul(state[3][i], mixColumnMatrix[j][3]));
+            }
+            for(int k = 0; k < dimensions; k++){
+                state[k][i] = temp[k];
+            }
+
+        }
+        return state;
+    }
+
+    //nie wiem co to robi i jak to działa
+    //probowalem. nic nie zrozumialem
+    public byte fMul(byte a, byte b) {
+        byte result = 0;  // Wynik zaczynamy od 0
+
+        for (int i = 0; i < 8; i++) {
+            if ((b & 1) != 0) {  // Jeśli najmłodszy bit b jest 1, dodajemy a (czyli XOR)
+                result ^= a;
+            }
+
+            boolean carry = (a & 0x80) != 0; // Sprawdzamy, czy trzeba redukować
+            a <<= 1;  // Mnożenie przez x (czyli przesunięcie w lewo)
+
+            if (carry) {  // Jeśli przekroczyło 8 bitów, redukujemy modulo 0x1B
+                a ^= 0x1B;
+            }
+            b >>= 1;  // Przesuwamy b w prawo, by sprawdzić kolejny bit
+        }
+
+        return result;
+    }
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// GENEROWANIE KLUCZA //////////////////////////////////
+
     public byte[][] expandKey(byte[] key){
         //Tworzymy tablicę dwówymiarową bo tak jest w algorytmie ale też łatwiej na to patrzeć XD
         //Zgodnie z algorytmem jeden klucz jest 4x4 zatem musimy mieć 4 wiersze
         //oraz ilosc kolumn w jednym kluczu(Nb) pomnożona przez ilosc rund+1, bo pomimo że
         //rund jest np.10 to klucz dodajemy też przed wszystkimi rundami
-        int totalNumOfWords = wymiary*(numOfRounds+1);
-        byte[][] temp = new byte[totalNumOfWords][wymiary];
+        int totalNumOfWords = dimensions*(numOfRounds+1);
+        byte[][] temp = new byte[totalNumOfWords][dimensions];
         byte[] row;
         int i = 0;
 
@@ -88,7 +173,6 @@ public class AES {
             temp[i][3] = key[4*i+3];
             i++;
         }
-
 
         //bierzemy każdy wiersz po kolei i będziemy wytwarzać kolejne
         //nie zerujemy i bo kolejne słowa wytwarzamy na podstawie poprzednich więc nie chcemy
@@ -119,7 +203,7 @@ public class AES {
                 row = subRow(row);
             }
 
-            for(int j = 0; j<wymiary; j++){
+            for(int j = 0; j<dimensions; j++){
                 //Na koniec do pierwotnej tablicy wpisujemy odpowiednio przetworzone slowa
                 temp[i][j] = (byte) (row[j]^temp[i-numOfWords][j]);
             }
@@ -127,9 +211,6 @@ public class AES {
             //zwiekszamy o 1, bierzmy kolejny wiersz i od nowa
             i++;
         }
-
-
-
 
         return temp;
     }
@@ -153,7 +234,7 @@ public class AES {
 
     public byte[] subRow(byte[] row){
         byte[] temp = new byte[row.length];
-        for(int i = 0; i < wymiary; i++){
+        for(int i = 0; i < row.length; i++){
             //podmieniamy caly wiersz naraz
             //Wartosc danego bajtu staje sie indexem spod ktorego bierzemy wartosc do podmiany
             //Zapis &0xFF sprawia ze wartosc bajtu na pewno zostanie odczytana jako dodatnia
