@@ -5,7 +5,66 @@ import pl.cryptography.view.AES;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AES_Test {
+public class AESTest {
+
+    @Test
+    public void mixColumsTest(){
+        byte[][] origin = {
+                {(byte) 0x87, (byte) 0xf2, (byte) 0x4d, (byte) 0x97},
+                {(byte) 0x6e, (byte) 0x4c, (byte) 0x90, (byte) 0xec},
+                {(byte) 0x46, (byte) 0xe7, (byte) 0x4a, (byte) 0xc3},
+                {(byte) 0xa6, (byte) 0x8c, (byte) 0xd8, (byte) 0x95}
+        };
+
+        byte[][] anticipated = {
+                {(byte) 0x47, (byte) 0x40, (byte) 0xa3, (byte) 0x4c},
+                {(byte) 0x37, (byte) 0xd4, (byte) 0x70, (byte) 0x9f},
+                {(byte) 0x94, (byte) 0xe4, (byte) 0x3a, (byte) 0x42},
+                {(byte) 0xed, (byte) 0xa5, (byte) 0xa6, (byte) 0xbc}
+        };
+
+        AES aes = new AES();
+        byte[][] after = aes.mixColumns(origin);
+
+        for(int i=0; i<4; i++){
+            for(int j=0; j<4; j++){
+                assertEquals((anticipated[i][j] & 0xFF), (after[i][j]) & 0xFF);
+            }
+        }
+
+    }
+
+    @Test
+    public void fMulTest(){
+        AES aes = new AES();
+        byte a = (byte) 0x57;
+        byte b = (byte) 0x83;
+
+        byte r = aes.fMul(a, b);
+        assertEquals((0xC1 & 0xFF), (r & 0xFF));
+    }
+
+    @Test
+    public void shiftRowsTest(){
+        byte[][] blok = {{(byte) 0xAA, (byte) 0xBB, (byte) 0xCC, (byte) 0xDD},
+                         {(byte) 0xEE, (byte) 0xFF, (byte) 0x11, (byte) 0x22},
+                         {(byte) 0x33, (byte) 0x44, (byte) 0x55, (byte) 0x66},
+                         {(byte) 0x77, (byte) 0x88, (byte) 0x99, (byte) 0x00}};
+
+        byte[][] blok2 = {{(byte) 0xAA, (byte) 0xBB, (byte) 0xCC, (byte) 0xDD},
+                          {(byte) 0xFF, (byte) 0x11, (byte) 0x22, (byte) 0xEE},
+                          {(byte) 0x55, (byte) 0x66, (byte) 0x33, (byte) 0x44},
+                          {(byte) 0x00, (byte) 0x77, (byte) 0x88, (byte) 0x99}};
+
+        AES aes = new AES();
+        blok = aes.shiftRows(blok);
+
+        for(int i = 0; i < 4; i++){
+            for(int j = 0; j < 4; j++){
+                assertEquals((blok[i][j] & 0xFF), (blok2[i][j] &0xFF));
+            }
+        }
+    }
 
     @Test
     public void subRowTest() {
@@ -30,8 +89,6 @@ public class AES_Test {
         byte[] row2 = aes.g(row, 1);
         byte[] row3 = {(byte) 0x7D, (byte) 0x16, (byte) 0xBB, (byte) 0x63};
 
-        System.out.println(row2);
-
         assertEquals(row3[0] & 0xFF, row2[0] & 0xFF);
         assertEquals(row3[1] & 0xFF, row2[1] & 0xFF);
         assertEquals(row3[2] & 0xFF, row2[2] & 0xFF);
@@ -40,7 +97,7 @@ public class AES_Test {
 
     @Test
     public void expandKeyTest() {
-        byte key[] = {(byte) 0xAA, (byte) 0xBB, (byte) 0xCC, (byte) 0xDD,
+        byte[] key = {(byte) 0xAA, (byte) 0xBB, (byte) 0xCC, (byte) 0xDD,
                 (byte) 0xEE, (byte) 0xFF, (byte) 0x11, (byte) 0x22,
                 (byte) 0x33, (byte) 0x44, (byte) 0x55, (byte) 0x66,
                 (byte) 0x77, (byte) 0x88, (byte) 0x99, (byte) 0x00};
@@ -91,8 +148,6 @@ public class AES_Test {
                 {(byte) 0x75, (byte) 0x8C, (byte) 0x1B, (byte) 0x34},
                 {(byte) 0x4F, (byte) 0xD4, (byte) 0x8C, (byte) 0xE9}
         };
-
-
 
         AES aes = new AES();
 
