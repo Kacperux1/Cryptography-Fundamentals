@@ -5,7 +5,7 @@ import pl.cryptography.view.AES;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class AES_Test {
+public class AesTest {
 
     @Test
     public void subRowTest() {
