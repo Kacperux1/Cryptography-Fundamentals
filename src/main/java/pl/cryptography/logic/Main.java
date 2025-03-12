@@ -1,4 +1,4 @@
-package pl.cryptography.view;
+package pl.cryptography.logic;
 
 public class Main {
     private static final int[] sbox = {

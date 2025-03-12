@@ -1,4 +1,4 @@
-package Logic;
+package pl.cryptography.logic;
 
 public class AES {
     final private int dimensions = 4; //Nb - liczba kolumn w stanie, czyli tak w zasadzie dimensions bloku
