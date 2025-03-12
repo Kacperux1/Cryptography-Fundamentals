@@ -77,14 +77,6 @@ public class AES {
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// SZYFROWANIE /////////////////////////////////////
 
-    /*public byte[] zaszyfruj(byte[] message, byte[] key){
-        numOfWords = key.length/4;
-        numOfRounds = numOfWords+6;
-
-        mainKey = expandKey(key);
-        return null;
-    }*/
-
     public byte[] encode(byte[] message, byte[] key){
         numOfWords = key.length / 4;
         numOfRounds = numOfWords+6;
