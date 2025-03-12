@@ -77,12 +77,72 @@ public class AES {
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// SZYFROWANIE /////////////////////////////////////
 
-    public byte[] zaszyfruj(byte[] message, byte[] key){
+    /*public byte[] zaszyfruj(byte[] message, byte[] key){
         numOfWords = key.length/4;
         numOfRounds = numOfWords+6;
 
         mainKey = expandKey(key);
         return null;
+    }*/
+
+    public byte[] encode(byte[] message, byte[] key){
+        numOfWords = key.length / 4;
+        numOfRounds = numOfWords+6;
+        int length;
+        int pom = message.length / 16;
+        if (pom==0)
+                length = 16;
+        else if ((message.length % 16) != 0)
+            length = (pom+1)*16;
+        else
+            length = pom*16;
+
+        byte[] result = new byte[length];
+        byte[] temp = new byte[length];
+        byte[] blok = new byte[16];
+
+        mainKey = expandKey(key);
+
+        for (int i = 0; i < length;i++) {
+            if(i<message.length)
+                temp[i]=message[i];
+            else
+                temp[i]=0;
+        }
+
+        for(int i = 0; i < length;){
+            for(int j = 0; j < 16; j++)
+                blok[j] = temp[i++];
+            blok = encrypt(blok);
+
+            for(int k = 0; k < 16; k++){
+                result[i - 16 + k] = blok [k];
+            }
+        }
+
+        return result;
+    }
+
+    public byte[] encrypt(byte[] in){
+        byte[] temp = new byte[in.length];
+        byte[][] state = new byte[4][4];
+        for(int i = 0; i < in.length; i++){
+            state[i/4][i%4] = in[i];
+        }
+        state = addRoundKey(state, mainKey, 0);
+
+        for(int round = 1; round < numOfRounds; round++){
+            state = subBytes(state);
+            state = shiftRows(state);
+            state = mixColumns(state);
+            state = addRoundKey(state, mainKey, round);
+        }
+        state = subBytes(state);
+        state = shiftRows(state);
+        state = addRoundKey(state, mainKey, numOfRounds);
+        for (int i = 0; i < temp.length; i++)
+            temp[i] = state[i / 4][i%4];
+        return temp;
     }
 
     public byte[][] addRoundKey(byte[][] state, byte[][] key, int round){
