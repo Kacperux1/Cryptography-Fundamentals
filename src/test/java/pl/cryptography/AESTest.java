@@ -1,7 +1,7 @@
 package pl.cryptography;
 
 import org.junit.jupiter.api.Test;
-import pl.cryptography.view.AES;
+import Logic.AES;
 
 import static org.junit.jupiter.api.Assertions.*;
 

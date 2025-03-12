@@ -1,4 +1,4 @@
-package pl.cryptography.view;
+package Logic;
 
 public class AES {
     final private int dimensions = 4; //Nb - liczba kolumn w stanie, czyli tak w zasadzie dimensions bloku
@@ -77,13 +77,13 @@ public class AES {
 /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// SZYFROWANIE /////////////////////////////////////
 
-    /*public byte[] zaszyfruj(byte[] message, byte[] key){
+    public byte[] zaszyfruj(byte[] message, byte[] key){
         numOfWords = key.length/4;
         numOfRounds = numOfWords+6;
 
         mainKey = expandKey(key);
         return null;
-    }*/
+    }
 
     public byte[][] addRoundKey(byte[][] state, byte[][] key, int round){
         byte[][] temp = {
