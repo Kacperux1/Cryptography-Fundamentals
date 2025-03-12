@@ -9,6 +9,36 @@ public class AESTest {
     private AES aes = new AES();
 
     @Test
+    public void addRoundKeyTest(){
+        byte[][] state = {
+                {(byte) 0x19, (byte) 0xa0, (byte) 0x9a, (byte) 0xe9},
+                {(byte) 0x3d, (byte) 0xf4, (byte) 0xc6, (byte) 0xf8},
+                {(byte) 0xe3, (byte) 0xe2, (byte) 0x8d, (byte) 0x48},
+                {(byte) 0xbe, (byte) 0x2b, (byte) 0x2a, (byte) 0x08}};
+
+        byte[][] key = {{(byte) 0xAA, (byte) 0xBB, (byte) 0xCC, (byte) 0xDD},
+                        {(byte) 0xEE, (byte) 0xFF, (byte) 0x11, (byte) 0x22},
+                        {(byte) 0x33, (byte) 0x44, (byte) 0x55, (byte) 0x66},
+                        {(byte) 0x77, (byte) 0x88, (byte) 0x99, (byte) 0x00}};
+
+        byte[][] anticipated = {
+                {(byte) 0xB3, (byte) 0x4E, (byte) 0xA9, (byte) 0x9E},
+                {(byte) 0x86, (byte) 0x0B, (byte) 0x82, (byte) 0x70},
+                {(byte) 0x2F, (byte) 0xF3, (byte) 0xD8, (byte) 0xD1},
+                {(byte) 0x63, (byte) 0x09, (byte) 0x4C, (byte) 0x08}};
+
+        byte[][] result = aes.addRoundKey(state, key, 0);
+
+        for(int i = 0; i < 4; i++){
+            for(int j = 0; j < 4; j++){
+                assertEquals((anticipated[i][j] & 0xFF), (result[i][j] & 0xFF));
+            }
+        }
+
+
+    }
+
+    @Test
     public void subBytesTest() {
         byte[][] blok = {{(byte) 0x19, (byte) 0xa0, (byte) 0x9a, (byte) 0xe9},
                          {(byte) 0x3d, (byte) 0xf4, (byte) 0xc6, (byte) 0xf8},

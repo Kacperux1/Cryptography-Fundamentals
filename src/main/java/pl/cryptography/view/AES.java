@@ -85,6 +85,21 @@ public class AES {
         return null;
     }*/
 
+    public byte[][] addRoundKey(byte[][] state, byte[][] key, int round){
+        byte[][] temp = {
+                {(byte) 0x00, (byte) 0x11, (byte) 0x22, (byte) 0x33},
+                {(byte) 0x44, (byte) 0x55, (byte) 0x66, (byte) 0x77},
+                {(byte) 0x88, (byte) 0x99, (byte) 0xaa, (byte) 0xbb},
+                {(byte) 0xcc, (byte) 0xdd, (byte) 0xee, (byte) 0xff}
+        };
+        for(int i = 0; i < dimensions; i++){
+            for(int j = 0; j < dimensions; j++){
+                temp[i][j] = (byte) (state[i][j] ^ key[round*dimensions+j][i]);
+            }
+        }
+        return temp;
+    }
+
     public byte[][] subBytes(byte[][] state){
         for(int i=0; i<dimensions; i++){
             state[i] = subRow(state[i]);
@@ -233,8 +248,8 @@ public class AES {
     }
 
     public byte[] subRow(byte[] row){
-        byte[] temp = new byte[row.length];
-        for(int i = 0; i < row.length; i++){
+        byte[] temp = new byte[dimensions];
+        for(int i = 0; i < dimensions; i++){
             //podmieniamy caly wiersz naraz
             //Wartosc danego bajtu staje sie indexem spod ktorego bierzemy wartosc do podmiany
             //Zapis &0xFF sprawia ze wartosc bajtu na pewno zostanie odczytana jako dodatnia
