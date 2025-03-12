@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Text?>
+
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="pl.cryptography.view.CipherWindowController">
+   <children>
+      <TextArea layoutX="14.0" layoutY="207.0" prefHeight="174.0" prefWidth="219.0" />
+      <TextArea layoutX="340.0" layoutY="207.0" prefHeight="174.0" prefWidth="219.0" />
+      <TextField layoutX="45.0" layoutY="29.0" prefHeight="26.0" prefWidth="170.0" />
+      <Button layoutX="236.0" layoutY="29.0" mnemonicParsing="false" text="Generuj klucz" />
+      <Button layoutX="248.0" layoutY="224.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="65.0" text="Szyfruj" />
+      <Button layoutX="248.0" layoutY="272.0" mnemonicParsing="false" text="Deszyfryzuj" />
+      <RadioButton layoutX="45.0" layoutY="95.0" mnemonicParsing="false" text="z pliku">
+         <toggleGroup>
+            <ToggleGroup fx:id="source" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton layoutX="45.0" layoutY="127.0" mnemonicParsing="false" text="z klawiatury" toggleGroup="$source" />
+      <Button layoutX="237.0" layoutY="71.0" mnemonicParsing="false" text="wybierz plik..." />
+      <Text layoutX="345.0" layoutY="60.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aktualnie wybrany plik do szyfrowania..." />
+      <Text layoutX="45.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dane należy pobrać..." />
+      <Text layoutX="333.0" layoutY="121.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aktualnie wybrany plik do deszyfrowania..." />
+      <TextField layoutX="340.0" layoutY="131.0" prefHeight="26.0" prefWidth="210.0" />
+      <TextField layoutX="340.0" layoutY="78.0" prefHeight="26.0" prefWidth="210.0" />
+      <Button layoutX="238.0" layoutY="131.0" mnemonicParsing="false" text="zapisz tekst..." />
+      <Button layoutX="233.0" layoutY="172.0" mnemonicParsing="false" text="zapisz szyfrogram..." />
+   </children>
+</AnchorPane>
