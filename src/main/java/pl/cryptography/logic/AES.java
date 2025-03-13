@@ -66,6 +66,13 @@ public class AES {
                                               {(byte) 0x01, (byte) 0x01, (byte) 0x02, (byte) 0x03},
                                               {(byte) 0x03, (byte) 0x01, (byte) 0x01, (byte) 0x02}};
 
+    private final byte[][] invMixColumnMatrix = {
+            {(byte) 0x0E, (byte) 0x0B, (byte) 0x0D, (byte) 0x09},
+            {(byte) 0x09, (byte) 0x0E, (byte) 0x0B, (byte) 0x0D},
+            {(byte) 0x0D, (byte) 0x09, (byte) 0x0E, (byte) 0x0B},
+            {(byte) 0x0B, (byte) 0x0D, (byte) 0x09, (byte) 0x0E}
+    };
+
     public void setNr(int nr) {
         numOfRounds = nr;
     }
@@ -121,6 +128,7 @@ public class AES {
         for(int i = 0; i < in.length; i++){
             state[i/4][i%4] = in[i];
         }
+
         state = addRoundKey(state, mainKey, 0);
 
         for(int round = 1; round < numOfRounds; round++){
@@ -138,12 +146,7 @@ public class AES {
     }
 
     public byte[][] addRoundKey(byte[][] state, byte[][] key, int round){
-        byte[][] temp = {
-                {(byte) 0x00, (byte) 0x11, (byte) 0x22, (byte) 0x33},
-                {(byte) 0x44, (byte) 0x55, (byte) 0x66, (byte) 0x77},
-                {(byte) 0x88, (byte) 0x99, (byte) 0xaa, (byte) 0xbb},
-                {(byte) 0xcc, (byte) 0xdd, (byte) 0xee, (byte) 0xff}
-        };
+        byte[][] temp = new byte[4][4];
         for(int i = 0; i < dimensions; i++){
             for(int j = 0; j < dimensions; j++){
                 temp[i][j] = (byte) (state[i][j] ^ key[round*dimensions+j][i]);
@@ -210,10 +213,113 @@ public class AES {
             b >>= 1;  // Przesuwamy b w prawo, by sprawdzić kolejny bit
         }
 
+
+        return result;
+    }
+
+//////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////// DESZYFROWANIE ////////////////////////////////////
+
+
+    public byte[] decode(byte[] message, byte[] key){
+        numOfWords = key.length / 4;
+        numOfRounds = numOfWords+6;
+        int length = message.length;
+
+        byte[] result = new byte[length];
+        byte[] temp = new byte[length];
+        byte[] blok = new byte[16];
+
+        mainKey = expandKey(key);
+
+        for (int i = 0; i < length;i++) {
+            if(i<message.length)
+                temp[i]=message[i];
+            else
+                temp[i]=0;
+        }
+
+        for(int i = 0; i < length;){
+            for(int j = 0; j < 16; j++)
+                blok[j] = temp[i++];
+            blok = decrypt(blok);
+
+            for(int k = 0; k < 16; k++){
+                result[i - 16 + k] = blok [k];
+            }
+        }
+
         return result;
     }
 
 
+    public byte[] decrypt(byte[] in){
+        byte[] temp = new byte[in.length];
+        byte[][] state = new byte[4][4];
+        for(int i = 0; i < in.length; i++){
+            state[i/4][i%4] = in[i];
+        }
+
+        // Dodanie ostatniego klucza rundy
+        state = addRoundKey(state, mainKey, numOfRounds);
+        state = inv_shiftRows(state);
+        state = inv_subBytes(state);
+
+        // Główna pętla deszyfrująca
+        for (int round = numOfRounds - 1; round > 0; round--) {
+            state = addRoundKey(state, mainKey, round);
+            state = inv_mixColumns(state);
+            state = inv_shiftRows(state);
+            state = inv_subBytes(state);
+        }
+
+        // Ostatnie dodanie klucza rundy
+        state = addRoundKey(state, mainKey, 0);
+
+        for (int i = 0; i < temp.length; i++)
+            temp[i] = state[i / 4][i%4];
+        return temp;
+    }
+
+    public byte[][] inv_mixColumns(byte[][] state) {
+        byte[] temp = new byte[4];
+
+        for (int i = 0; i < 4; i++) { // Iteracja po kolumnach
+            for (int j = 0; j < 4; j++) {
+                temp[j] = (byte) (fMul(state[0][i], invMixColumnMatrix[j][0]) ^
+                        fMul(state[1][i], invMixColumnMatrix[j][1]) ^
+                        fMul(state[2][i], invMixColumnMatrix[j][2]) ^
+                        fMul(state[3][i], invMixColumnMatrix[j][3]));
+            }
+            for (int k = 0; k < 4; k++) {
+                state[k][i] = temp[k];
+            }
+        }
+
+        return state;
+    }
+
+    public byte[][] inv_subBytes(byte[][] state) {
+        for (int i = 0; i < 4; i++)
+            for (int j = 0; j < 4; j++)
+                state[i][j] = (byte)(inv_sbox[(state[i][j] & 0xff)]);
+        return state;
+    }
+
+    public byte[][] inv_shiftRows(byte[][] state){
+        byte[] temp = new byte[dimensions];
+        for(int i=1; i<dimensions; i++){
+            for(int j=0; j<dimensions; j++){
+                temp[j] = state[i][(j-i+dimensions) % dimensions];
+            }
+
+            for(int j=0; j<dimensions; j++){
+                state[i][j] = temp[j];
+            }
+        }
+
+        return state;
+    }
 
 
 
@@ -234,10 +340,10 @@ public class AES {
         //Najpierw odpowiednio kopiujemy klucz, który dostalismy, z tablocy jednowymiarowej
         // do tablicy dwowymiarowej
         while (i < numOfWords){
-            temp[i][0] = key[4*i];
-            temp[i][1] = key[4*i+1];
-            temp[i][2] = key[4*i+2];
-            temp[i][3] = key[4*i+3];
+            temp[0][i] = key[4*i];
+            temp[1][i] = key[4*i+1];
+            temp[2][i] = key[4*i+2];
+            temp[3][i] = key[4*i+3];
             i++;
         }
 
@@ -270,6 +376,7 @@ public class AES {
                 row = subRow(row);
             }
 
+
             for(int j = 0; j<dimensions; j++){
                 //Na koniec do pierwotnej tablicy wpisujemy odpowiednio przetworzone slowa
                 temp[i][j] = (byte) (row[j]^temp[i-numOfWords][j]);
@@ -282,21 +389,26 @@ public class AES {
         return temp;
     }
 
+
     public byte[] g(byte[] row, int round){
+        byte[] tmp = new byte[row.length];
+        for(int i = 0; i < row.length; i++){
+            tmp[i] = row[i];
+        }
 
         //przesuwamy wszytskie bajty o jeden w lewo
-        byte temp = row[0];
-        row[0] = row[1];
-        row[1] = row[2];
-        row[2] = row[3];
-        row[3] = temp;
+        byte temp = tmp[0];
+        tmp[0] = tmp[1];
+        tmp[1] = tmp[2];
+        tmp[2] = tmp[3];
+        tmp[3] = temp;
 
         //podmieniamy wartosci zgodnie z tablica substytucji(sbox)
-        row = subRow(row);
+        tmp = subRow(tmp);
 
-        row[0] ^= Rcon[round];
+        tmp[0] ^= Rcon[round];
 
-        return row;
+        return tmp;
     }
 
     public byte[] subRow(byte[] row){
