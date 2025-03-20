@@ -221,34 +221,28 @@ public class AES {
 /////////////////////////////////// DESZYFROWANIE ////////////////////////////////////
 
 
-    public byte[] decode(byte[] message, byte[] key){
-        numOfWords = key.length / 4;
-        numOfRounds = numOfWords+6;
-        int length = message.length;
-
-        byte[] result = new byte[length];
-        byte[] temp = new byte[length];
+    public byte[] decode(byte[] encrypted, byte[] key){
+        byte[] tmpResult = new byte[encrypted.length];
         byte[] blok = new byte[16];
-
+        numOfWords = key.length/4;
+        numOfRounds = numOfWords + 6;
         mainKey = expandKey(key);
-
-        for (int i = 0; i < length;i++) {
-            if(i<message.length)
-                temp[i]=message[i];
-            else
-                temp[i]=0;
-        }
-
-        for(int i = 0; i < length;){
-            for(int j = 0; j < 16; j++)
-                blok[j] = temp[i++];
+        for (int i = 0; i < encrypted.length;)
+        {
+            for (int j=0;j<16;j++) blok[j]=encrypted[i++];
             blok = decrypt(blok);
-
-            for(int k = 0; k < 16; k++){
-                result[i - 16 + k] = blok [k];
-            }
+            System.arraycopy(blok, 0, tmpResult,i-16, blok.length);
+        }
+        int cnt = 0;
+        for (int i = 1; i < 17; i++)
+        {
+            if (tmpResult[tmpResult.length - i] == 0)
+                cnt += 1;
+            else  break;
         }
 
+        byte[] result = new byte[tmpResult.length - cnt];
+        System.arraycopy(tmpResult, 0, result, 0, tmpResult.length - cnt);
         return result;
     }
 
