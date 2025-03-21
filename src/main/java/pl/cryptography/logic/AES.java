@@ -57,8 +57,10 @@ public class AES {
 
 
     private final byte[] Rcon = {
-            (byte) 0x8d, (byte)0x01, (byte)0x02, (byte)0x04, (byte)0x08, (byte)0x10,
-            (byte)0x20, (byte)0x40, (byte)0x80, (byte)0x1b, (byte)0x36
+            (byte) 0x8d, (byte) 0x01, (byte) 0x02, (byte) 0x04,
+            (byte) 0x08, (byte) 0x10, (byte) 0x20, (byte) 0x40,
+            (byte) 0x80, (byte) 0x1B, (byte) 0x36, (byte) 0x6C,
+            (byte) 0xD8, (byte) 0xAB, (byte) 0x4D
     };
 
     private final byte[][] mixColumnMatrix = {{(byte) 0x02, (byte) 0x03, (byte) 0x01, (byte) 0x01},
@@ -356,10 +358,9 @@ public class AES {
         //Najpierw odpowiednio kopiujemy klucz, który dostalismy, z tablocy jednowymiarowej
         // do tablicy dwowymiarowej
         while (i < numOfWords){
-            temp[0][i] = key[4*i];
-            temp[1][i] = key[4*i+1];
-            temp[2][i] = key[4*i+2];
-            temp[3][i] = key[4*i+3];
+            for(int j = 0; j < dimensions; j++){
+                temp[i][j] = key[numOfWords*j+i];
+            }
             i++;
         }
 
