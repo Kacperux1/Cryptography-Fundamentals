@@ -73,15 +73,15 @@ public class AES {
             {(byte) 0x0B, (byte) 0x0D, (byte) 0x09, (byte) 0x0E}
     };
 
-    public void setNr(int nr) {
-        numOfRounds = nr;
+    public void setNumOfWords(int numOfWords) {
+        this.numOfWords = numOfWords;
     }
 
-    public void setNk(int nk) {
-        numOfWords = nk;
+    public void setNumOfRounds(int numOfRounds) {
+        this.numOfRounds = numOfRounds;
     }
 
-/////////////////////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// SZYFROWANIE /////////////////////////////////////
 
     public byte[] encode(byte[] message, byte[] key){
@@ -89,12 +89,19 @@ public class AES {
         numOfRounds = numOfWords+6;
         int length;
         int pom = message.length / 16;
-        if (pom==0)
-                length = 16;
-        else if ((message.length % 16) != 0)
-            length = (pom+1)*16;
-        else
-            length = pom*16;
+        int added;
+        if (pom==0){
+            length = 16;
+            added = length - message.length;
+        }
+        else if ((message.length % 16) != 0) {
+            length = (pom + 1) * 16;
+            added = length - message.length;
+        }
+        else {
+            length = (pom+1) * 16;
+            added = 0;
+        }
 
         byte[] result = new byte[length];
         byte[] temp = new byte[length];
@@ -109,14 +116,21 @@ public class AES {
                 temp[i]=0;
         }
 
+        if (added == 0){
+            for(int i = length-16; i < length; i++){
+                temp[i] = (byte) 0xAB;
+            }
+        }
+        else {
+            temp[length-1] = (byte) added;
+        }
+
         for(int i = 0; i < length;){
             for(int j = 0; j < 16; j++)
                 blok[j] = temp[i++];
             blok = encrypt(blok);
 
-            for(int k = 0; k < 16; k++){
-                result[i - 16 + k] = blok [k];
-            }
+            System.arraycopy(blok, 0, result, i - 16, 16);
         }
 
         return result;
@@ -169,9 +183,7 @@ public class AES {
                 temp[j] = state[i][(j+i) % dimensions];
             }
 
-            for(int j=0; j<dimensions; j++){
-                state[i][j] = temp[j];
-            }
+            System.arraycopy(temp, 0, state[i], 0, dimensions);
         }
 
         return state;
@@ -221,28 +233,39 @@ public class AES {
 /////////////////////////////////// DESZYFROWANIE ////////////////////////////////////
 
 
-    public byte[] decode(byte[] encrypted, byte[] key){
-        byte[] tmpResult = new byte[encrypted.length];
+    public byte[] decode(byte[] cipher, byte[] key){
+        byte[] tmpResult = new byte[cipher.length];
         byte[] blok = new byte[16];
         numOfWords = key.length/4;
         numOfRounds = numOfWords + 6;
         mainKey = expandKey(key);
-        for (int i = 0; i < encrypted.length;)
+        int added = 0;
+
+        for (int i = 0; i < cipher.length;)
         {
-            for (int j=0;j<16;j++) blok[j]=encrypted[i++];
+            for (int j=0;j<16;j++) blok[j]=cipher[i++];
             blok = decrypt(blok);
             System.arraycopy(blok, 0, tmpResult,i-16, blok.length);
         }
-        int cnt = 0;
-        for (int i = 1; i < 17; i++)
-        {
-            if (tmpResult[tmpResult.length - i] == 0)
-                cnt += 1;
-            else  break;
+
+        for(int i = tmpResult.length-16; i < tmpResult.length; i++){
+            if(tmpResult[i]!=(byte)0xAB){
+                added = 1;
+                break;
+            }
         }
 
-        byte[] result = new byte[tmpResult.length - cnt];
-        System.arraycopy(tmpResult, 0, result, 0, tmpResult.length - cnt);
+        int length;
+        if (added == 0){
+            length = tmpResult.length-16;
+        }
+        else {
+            length = tmpResult.length-added;
+        }
+
+
+        byte[] result = new byte[length];
+        System.arraycopy(tmpResult, 0, result, 0, length);
         return result;
     }
 
@@ -307,9 +330,7 @@ public class AES {
                 temp[j] = state[i][(j-i+dimensions) % dimensions];
             }
 
-            for(int j=0; j<dimensions; j++){
-                state[i][j] = temp[j];
-            }
+            System.arraycopy(temp, 0, state[i], 0, dimensions);
         }
 
         return state;
@@ -386,9 +407,7 @@ public class AES {
 
     public byte[] g(byte[] row, int round){
         byte[] tmp = new byte[row.length];
-        for(int i = 0; i < row.length; i++){
-            tmp[i] = row[i];
-        }
+        System.arraycopy(row, 0, tmp, 0, row.length);
 
         //przesuwamy wszytskie bajty o jeden w lewo
         byte temp = tmp[0];

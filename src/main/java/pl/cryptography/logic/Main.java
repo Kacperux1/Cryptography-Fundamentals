@@ -31,6 +31,7 @@ public class Main {
         System.out.println();
         System.out.println(toHexString(decoded));
 
+        System.out.println(0%16);
     }
 
     public static String toHexString(byte[] array) {
