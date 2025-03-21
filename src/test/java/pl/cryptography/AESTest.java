@@ -29,6 +29,10 @@ public class AESTest {
         for (int j = 0; j < message.length; j++) {
             assertEquals((message[j] & 0xFF), (plainText[j] & 0xFF));
         }
+
+        for (int j = 0; j < plainText.length; j++) {
+            assertEquals((message[j] & 0xFF), (plainText[j] & 0xFF));
+        }
     }
 
     @Test
@@ -45,6 +49,10 @@ public class AESTest {
         byte[] plainText = aes.decode(cipher, key);
 
         for (int j = 0; j < message.length; j++) {
+            assertEquals((message[j] & 0xFF), (plainText[j] & 0xFF));
+        }
+
+        for (int j = 0; j < plainText.length; j++) {
             assertEquals((message[j] & 0xFF), (plainText[j] & 0xFF));
         }
     }
@@ -67,6 +75,10 @@ public class AESTest {
         byte[] plainText = aes.decode(cipher, key);
 
         for (int j = 0; j < message.length; j++) {
+            assertEquals((message[j] & 0xFF), (plainText[j] & 0xFF));
+        }
+
+        for (int j = 0; j < plainText.length; j++) {
             assertEquals((message[j] & 0xFF), (plainText[j] & 0xFF));
         }
     }

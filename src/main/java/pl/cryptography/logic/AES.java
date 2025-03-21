@@ -81,7 +81,7 @@ public class AES {
         this.numOfRounds = numOfRounds;
     }
 
-    /////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
 /////////////////////////////////// SZYFROWANIE /////////////////////////////////////
 
     public byte[] encode(byte[] message, byte[] key){
@@ -260,6 +260,7 @@ public class AES {
             length = tmpResult.length-16;
         }
         else {
+            added = tmpResult[tmpResult.length-1];
             length = tmpResult.length-added;
         }
 
