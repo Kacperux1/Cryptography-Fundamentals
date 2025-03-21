@@ -22,7 +22,7 @@
          </toggleGroup>
       </RadioButton>
       <RadioButton layoutX="74.0" layoutY="235.0" mnemonicParsing="false" text="z klawiatury" toggleGroup="$source" />
-      <Button fx:id="fileChoose" layoutX="457.0" layoutY="105.0" mnemonicParsing="false" onAction="#selectFile" text="wybierz plik..." />
+      <Button fx:id="fileChoose" layoutX="457.0" layoutY="222.0" mnemonicParsing="false" onAction="#selectFile" text="wybierz plik..." />
       <Text layoutX="611.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aktualnie wybrany plik do szyfrowania..." />
       <Text layoutX="74.0" layoutY="177.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dane należy pobrać..." />
       <Text layoutX="611.0" layoutY="186.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aktualnie wybrany plik do deszyfrowania..." />
@@ -33,5 +33,7 @@
       <Button fx:id="fileReader" layoutX="87.0" layoutY="274.0" mnemonicParsing="false" onAction="#readFromFile" text="Wczytaj z pliku..." />
       <Button layoutX="186.0" layoutY="537.0" mnemonicParsing="false" onAction="#clearText" text="wyczyść" />
       <Button layoutX="740.0" layoutY="537.0" mnemonicParsing="false" onAction="#clearCipher" text="wyczyść" />
+      <Button layoutX="336.0" layoutY="87.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="150.0" text="Generuj klucz (24 bajty" />
+      <Button layoutX="336.0" layoutY="144.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="150.0" text="Generuj klucz (32 bajty" />
    </children>
 </AnchorPane>
