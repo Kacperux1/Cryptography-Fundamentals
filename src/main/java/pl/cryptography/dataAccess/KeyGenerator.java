@@ -6,12 +6,16 @@ public class KeyGenerator {
 
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-    public static byte[] generateKey16 () {
-        String key = "";
+    public static byte[] generateKey(int size) {
+        StringBuilder key = new StringBuilder();
         Random rand = new Random();
-        for(int i = 0; i < 16; i++){
-            key += CHARACTERS.charAt(rand.nextInt(CHARACTERS.length()));
+        for(int i = 0; i < size; i++){
+            key.append(CHARACTERS.charAt(rand.nextInt(CHARACTERS.length())));
         }
-        return key.getBytes();
+        return key.toString().getBytes();
     }
+
+
+
+
 }
