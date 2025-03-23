@@ -52,17 +52,7 @@ public class CipherWindowController {
     }
 
     public void saveTextToFile(ActionEvent actionEvent) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Wybierz plik");
-        fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Pliki tekstowe", "*.txt"),
-                new FileChooser.ExtensionFilter("Wszystkie pliki", "*.*")
-        );
-        Stage stage = (Stage) fileChoose.getScene().getWindow();
-        File selectedFile = fileChooser.showSaveDialog(stage);
-        if(selectedFile == null) {
-            showAlert("NIe wybrano pliku!");
-        }
+        File selectedFile = selectFileToSave();;
         try (FileWriter writer = new FileWriter(selectedFile)) {
             writer.write(textArea.getText());
             showAlert("Plik zapisany: " + selectedFile.getAbsolutePath());
@@ -71,7 +61,7 @@ public class CipherWindowController {
         }
     }
 
-    public void saveCipherToFile(ActionEvent actionEvent) {
+    private File selectFileToSave() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle("Wybierz plik");
         fileChooser.getExtensionFilters().addAll(
@@ -83,6 +73,11 @@ public class CipherWindowController {
         if(selectedFile == null) {
             showAlert("NIe wybrano pliku!");
         }
+        return selectedFile;
+    }
+
+    public void saveCipherToFile(ActionEvent actionEvent) {
+        File selectedFile = selectFileToSave();
         try {
             assert selectedFile != null;
             try (FileWriter writer = new FileWriter(selectedFile)) {
@@ -176,8 +171,15 @@ public class CipherWindowController {
     }
 
     public void selectDecipherFile(ActionEvent actionEvent) {
-
-        currentDecipherFile = selectFile();
+        File tempFile = selectFile();
+        try {
+            if (tempFile == null) {
+                throw new NullPointerException("Nie wybrano pliku.");
+            }
+        }
+        catch(NullPointerException e) {
+            showAlert(e.getMessage());
+        }
         decipherNamePreview.setText(currentDecipherFile.getAbsolutePath());
     }
 
