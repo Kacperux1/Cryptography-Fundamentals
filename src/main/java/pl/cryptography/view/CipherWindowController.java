@@ -179,6 +179,7 @@ public class CipherWindowController {
         }
         catch(NullPointerException e) {
             showAlert(e.getMessage());
+            return;
         }
         currentDecipherFile = tempFile;
         decipherNamePreview.setText(currentDecipherFile.getAbsolutePath());
