@@ -13,7 +13,7 @@ public class MainController {
 
     public void enterCipherWindow(ActionEvent actionEvent) {
         Stage stage = (Stage) symEncode.getScene().getWindow();
-        FXMLLoader fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("/pl/cryptography/CiperWindow.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(CryptographyFundamentals.class.getResource("/pl/cryptography/CiperWindow.fxml"));
         Scene scene;
         try {
             scene = new Scene(fxmlLoader.load(), 1024, 600);

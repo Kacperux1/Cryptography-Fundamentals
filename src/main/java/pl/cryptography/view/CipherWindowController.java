@@ -15,6 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
+import java.util.Optional;
 
 import static pl.cryptography.dataAccess.FileManager.readBytesFromFile;
 import static pl.cryptography.dataAccess.KeyGenerator.generateKey;
@@ -47,7 +48,14 @@ public class CipherWindowController {
     }
 
     public void selectFile(ActionEvent actionEvent) {
-        currentFile = selectFile();
+       File temp;
+       try {
+           temp = selectFile();
+       } catch (NullPointerException e) {
+           showAlert(e.getMessage());
+           return;
+       }
+        currentFile = temp;
         fileNamePreview.setText(currentFile.getAbsolutePath());
     }
 
@@ -171,11 +179,9 @@ public class CipherWindowController {
     }
 
     public void selectDecipherFile(ActionEvent actionEvent) {
-        File tempFile = selectFile();
+        File tempFile;
         try {
-            if (tempFile == null) {
-                throw new NullPointerException("Nie wybrano pliku.");
-            }
+            tempFile = selectFile();
         }
         catch(NullPointerException e) {
             showAlert(e.getMessage());
@@ -197,7 +203,7 @@ public class CipherWindowController {
         if (selectedFile != null) {
             System.out.println("Wybrano plik: " + selectedFile.getAbsolutePath());
         } else {
-            System.out.println("Nie wybrano pliku.");
+            throw new NullPointerException("nie wybrano pliku");
         }
         return selectedFile;
     }
