@@ -13,7 +13,7 @@ public class FileManager {
         return result;
     }
 
-    public void writeBytesToFile(byte[] data, File file) throws IOException {
+    public static void writeBytesToFile(byte[] data, File file) throws IOException {
         try (FileOutputStream fos = new FileOutputStream(file)) {
             fos.write(data);
         }

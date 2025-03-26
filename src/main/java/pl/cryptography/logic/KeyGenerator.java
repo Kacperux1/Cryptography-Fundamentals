@@ -1,4 +1,4 @@
-package pl.cryptography.dataAccess;
+package pl.cryptography.logic;
 
 import java.util.Random;
 

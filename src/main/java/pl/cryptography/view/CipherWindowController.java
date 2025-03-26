@@ -11,14 +11,15 @@ import javafx.stage.Stage;
 import pl.cryptography.logic.AES;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
-import java.util.Optional;
 
 import static pl.cryptography.dataAccess.FileManager.readBytesFromFile;
-import static pl.cryptography.dataAccess.KeyGenerator.generateKey;
+import static pl.cryptography.dataAccess.FileManager.writeBytesToFile;
+import static pl.cryptography.logic.KeyGenerator.generateKey;
 
 public class CipherWindowController {
     @FXML
@@ -39,7 +40,7 @@ public class CipherWindowController {
     private File currentFile;
     private File currentDecipherFile;
     private byte[] currentKey;
-
+    private byte[] currentPlainData;
     private byte[] currentCiphered;
 
 
@@ -60,14 +61,19 @@ public class CipherWindowController {
     }
 
     public void saveTextToFile(ActionEvent actionEvent) {
-        File selectedFile = selectFileToSave();;
-        try (FileWriter writer = new FileWriter(selectedFile)) {
-            writer.write(textArea.getText());
+        File selectedFile = selectFileToSave();
+        if (selectedFile == null) {
+            showAlert("Nie wybrano pliku!");
+            return;
+        }
+        try  {
+            writeBytesToFile(currentPlainData, selectedFile);
             showAlert("Plik zapisany: " + selectedFile.getAbsolutePath());
         } catch (IOException e) {
             showAlert("Błąd zapisu do pliku.");
         }
     }
+
 
     private File selectFileToSave() {
         FileChooser fileChooser = new FileChooser();
@@ -98,16 +104,19 @@ public class CipherWindowController {
     }
 
     public void readFromFile(ActionEvent actionEvent) {
-        String result = "";
+        byte [] result;
         try {
-            result = new String(readBytesFromFile(currentFile));
-            textArea.setText(result);
+            result = readBytesFromFile(currentFile);
+            currentPlainData = result;
+            textArea.setText(new String(result));
+
         } catch (IOException e) {
             showAlert("Błąd zapisu do pliku.");
         }
         catch (NullPointerException e) {
             showAlert("Wybierz plik!");
         }
+
     }
 
     public void clearText(ActionEvent actionEvent) {
