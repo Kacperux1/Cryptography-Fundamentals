@@ -139,7 +139,7 @@ public class CipherWindowController {
     }
 
     public void cipher(ActionEvent actionEvent) {
-        if(textArea.getText().equals("")) {
+        if(textArea.getText().isEmpty()) {
             showAlert("Brak tekstu!");
             return;
         }
@@ -155,7 +155,7 @@ public class CipherWindowController {
     }
 
     public void decipher(ActionEvent actionEvent) {
-        if(textArea.getText().equals("")) {
+        if(cipherArea.getText().isEmpty()) {
             showAlert("Brak tekstu!");
             return;
         }
