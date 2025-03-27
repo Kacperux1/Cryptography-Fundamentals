@@ -23,6 +23,12 @@ import static pl.cryptography.logic.KeyGenerator.generateKey;
 
 public class CipherWindowController {
     @FXML
+    private Button textSaver;
+    @FXML
+    private Button fileReader;
+    @FXML
+    private Button cipherReader;
+    @FXML
     private Button fileChoose;
     @FXML
     private TextArea textArea;
@@ -46,6 +52,11 @@ public class CipherWindowController {
 
     public void initialize() {
         fileNamePreview.setEditable(false);
+        decipherNamePreview.setEditable(false);
+        textArea.setEditable(false);
+        cipherArea.setEditable(false);
+        fileReader.setDisable(true);
+        cipherReader.setDisable(true);
     }
 
     public void selectFile(ActionEvent actionEvent) {
@@ -128,6 +139,10 @@ public class CipherWindowController {
     }
 
     public void cipher(ActionEvent actionEvent) {
+        if(textArea.getText().equals("")) {
+            showAlert("Brak tekstu!");
+            return;
+        }
         byte[] bytesToCipher = textArea.getText().getBytes(StandardCharsets.UTF_8);
         if (currentKey == null) {
             getKey(16);
@@ -140,7 +155,10 @@ public class CipherWindowController {
     }
 
     public void decipher(ActionEvent actionEvent) {
-
+        if(textArea.getText().equals("")) {
+            showAlert("Brak tekstu!");
+            return;
+        }
         byte[] decipheredBytes;
         decipheredBytes = aes.decode(currentCiphered, currentKey);
         textArea.setText(new String(decipheredBytes));
@@ -178,6 +196,8 @@ public class CipherWindowController {
         cipherArea.setEditable(true);
         textArea.setText("");
         cipherArea.setText("");
+        fileReader.setDisable(true);
+        cipherReader.setDisable(true);
     }
 
     public void dataFromFileOption(ActionEvent actionEvent) {
@@ -185,6 +205,8 @@ public class CipherWindowController {
         cipherArea.setEditable(false);
         textArea.setText("");
         cipherArea.setText("");
+        fileReader.setDisable(false);
+        cipherReader.setDisable(false);
     }
 
     public void selectDecipherFile(ActionEvent actionEvent) {
