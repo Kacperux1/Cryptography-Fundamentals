@@ -333,6 +333,32 @@ public class AESTest {
         }
     }
 
+    @Test
+    public void mixColumsTest2(){
+        byte[][] origin = {
+                {(byte) 0xd4, (byte) 0xe0, (byte) 0xb8, (byte) 0x1e},
+                {(byte) 0xbf, (byte) 0xb4, (byte) 0x41, (byte) 0x27},
+                {(byte) 0x5d, (byte) 0x52, (byte) 0x11, (byte) 0x98},
+                {(byte) 0x30, (byte) 0xae, (byte) 0xf1, (byte) 0xe5}
+        };
+
+        byte[][] anticipated = {
+                {(byte) 0x04, (byte) 0xe0, (byte) 0x48, (byte) 0x28},
+                {(byte) 0x66, (byte) 0xcb, (byte) 0xf8, (byte) 0x06},
+                {(byte) 0x81, (byte) 0x19, (byte) 0xd3, (byte) 0x26},
+                {(byte) 0xe5, (byte) 0x9a, (byte) 0x7a, (byte) 0x4c}
+        };
+
+        byte[][] after = aes.mixColumns(origin);
+
+        for(int i=0; i<4; i++){
+            for(int j=0; j<4; j++){
+                assertEquals((anticipated[i][j] & 0xFF), (after[i][j]) & 0xFF);
+            }
+        }
+
+    }
+
 
 
     @Test
