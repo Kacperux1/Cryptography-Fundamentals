@@ -37,5 +37,6 @@
       <Button layoutX="336.0" layoutY="144.0" mnemonicParsing="false" onAction="#generateKey32Bytes" prefHeight="26.0" prefWidth="150.0" text="Generuj klucz (32 bajty" />
       <Button layoutX="398.0" layoutY="274.0" mnemonicParsing="false" onAction="#selectDecipherFile" text="Wybierz plik do deszyfrowania" />
       <Button fx:id="cipherReader" layoutX="626.0" layoutY="287.0" mnemonicParsing="false" onAction="#readCipheredData" text="Wczytaj szyfrogram..." />
+      <Button fx:id="clearKey" layoutX="129.0" layoutY="79.0" mnemonicParsing="false" onAction="#clearKey" text="wyczyść" />
    </children>
 </AnchorPane>

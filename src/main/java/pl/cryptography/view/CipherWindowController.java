@@ -139,6 +139,11 @@ public class CipherWindowController {
     }
 
     public void cipher(ActionEvent actionEvent) {
+        if(currentKey.length >0 && (currentKey.length !=16 && currentKey.length!=24
+                && currentKey.length!=32)) {
+            showAlert("klucz ma nieprawidłową długość!");
+            return;
+        }
         if(textArea.getText().isEmpty()) {
             showAlert("Brak tekstu!");
             return;
@@ -147,10 +152,16 @@ public class CipherWindowController {
         if (currentKey == null) {
             getKey(16);
         }
-        byte[] cipheredBytes = new byte[bytesToCipher.length];
-        cipheredBytes = aes.encode(bytesToCipher, currentKey);
-        cipherArea.setText(Base64.getEncoder().encodeToString(cipheredBytes));
-        currentCiphered = cipheredBytes;
+        currentKey = keyPreview.getText().getBytes();
+        byte[] cipheredBytes;
+        try {
+            cipheredBytes = aes.encode(bytesToCipher, currentKey);
+            cipherArea.setText(Base64.getEncoder().encodeToString(cipheredBytes));
+            currentCiphered = cipheredBytes;
+        }
+        catch (Exception e) {
+            showAlert("Nie udało się zaszyfrować!");
+        }
 
     }
 
@@ -160,8 +171,13 @@ public class CipherWindowController {
             return;
         }
         byte[] decipheredBytes;
-        decipheredBytes = aes.decode(currentCiphered, currentKey);
-        textArea.setText(new String(decipheredBytes));
+        try {
+            decipheredBytes = aes.decode(currentCiphered, currentKey);
+            textArea.setText(new String(decipheredBytes));
+        } catch (Exception e){
+            showAlert("Nie udało sie odszyfrować (sprawdź, czy tym samym kluczem zaszyfrowano wiadomość.)");
+        }
+
     }
 
     private void getKey(int size) {
@@ -250,5 +266,10 @@ public class CipherWindowController {
         catch (NullPointerException e) {
             showAlert("Wybierz plik!");
         }
+    }
+
+    public void clearKey(ActionEvent actionEvent) {
+        keyPreview.setText("");
+        currentKey = null;
     }
 }
