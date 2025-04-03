@@ -381,7 +381,7 @@ public class AES {
                 //potrzemujemu numeru aktualnej rundy tworzenia klucza wiec korzystamy
                 //z tego ze i/4 zawsze bedzie zaokraglone w dol (7/4 = 1)
                 //sprawia to ze i staje sie naszym licznikiem zarowno wierszy jak i rund klucza
-                row = g(row, i/4);
+                row = g(row, i/numOfWords);
             }
             else if (numOfWords > 6 && i % numOfWords == 4){
                 //ten warunek dotyczy tylko AES-256, stąd warunek numOfWords>6
