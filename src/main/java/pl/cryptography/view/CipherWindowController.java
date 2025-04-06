@@ -39,7 +39,7 @@ public class CipherWindowController {
     @FXML
     private TextField keyPreview;
 
-    private final AES aes = new AES();
+
 
     @FXML
     private TextField decipherNamePreview;
@@ -139,6 +139,10 @@ public class CipherWindowController {
     }
 
     public void cipher(ActionEvent actionEvent) {
+        AES aes =  new AES();
+        if (currentKey == null || currentKey.length==0) {
+            getKey(16);
+        }
         if(currentKey.length >0 && (currentKey.length !=16 && currentKey.length!=24
                 && currentKey.length!=32)) {
             showAlert("klucz ma nieprawidłową długość!");
@@ -166,6 +170,7 @@ public class CipherWindowController {
     }
 
     public void decipher(ActionEvent actionEvent) {
+        AES aes =  new AES();
         if(cipherArea.getText().isEmpty()) {
             showAlert("Brak tekstu!");
             return;
