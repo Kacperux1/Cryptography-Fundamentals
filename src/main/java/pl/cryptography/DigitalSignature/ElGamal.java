@@ -47,15 +47,15 @@ public class ElGamal {
 
 
     public boolean verify(byte[] data, BigInteger r, BigInteger s) {
-
         MD5 md5 = new MD5();
         BigInteger hash = md5.hashFunction(data);
 
-        BigInteger v1 = g.modPow(hash, p).multiply(h.modPow(r, p)).mod(p);  // v1 = g^H(m) * h^r mod p
-        BigInteger v2 = r.modPow(s, p).mod(p);  // v2 = r^s mod p
+        BigInteger left = g.modPow(hash, p);
+        BigInteger right = h.modPow(r, p).multiply(r.modPow(s, p)).mod(p);
 
-        return v1.equals(v2);  // Jeśli v1 == v2, podpis jest ważny
+        return left.equals(right);
     }
+
 
     private BigInteger generatePrivateKey() {
         SecureRandom rand = new SecureRandom();
