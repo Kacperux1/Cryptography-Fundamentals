@@ -15,6 +15,7 @@
          </Text>
 
          <Button fx:id="symEncode" onAction="#enterCipherWindow" text="Szyfrowanie symetryczne (AES)" />
+         <Button fx:id="asymEncode" mnemonicParsing="false" onAction="#enterElGamalWindow" text="Podpis cyfrowy (ElGamal)" />
       </VBox>
    </children>
 </StackPane>

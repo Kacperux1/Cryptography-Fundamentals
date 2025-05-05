@@ -30,4 +30,183 @@ public class ElGamalWindowController {
     private TextField privateKey;
     @FXML
     private TextField publicKey;
+    @FXML
+    private TextArea textArea;
+    @FXML
+    private TextArea cipherArea;
+    @FXML
+    private TextField fileNamePreview;
+    @FXML
+    private Button fileChoose;
+    @FXML
+    private Button fileReader;
+    @FXML
+    private Button cipherReader;
+
+
+    @FXML
+    private TextField decipherNamePreview;
+    private File currentFile;
+    private File currentDecipherFile;
+    private byte[] currentKey;
+    private byte[] currentPlainData;
+    private byte[] currentCiphered;
+
+
+    public void clearText(ActionEvent actionEvent) {
+        textArea.setText("");
+    }
+    public void clearPrimeNumber(ActionEvent actionEvent) {
+        primeNumber.setText("");
+    }
+    public void clearGenerator(ActionEvent actionEvent) {
+        generator.setText("");
+    }
+    public void clearPrivateKey(ActionEvent actionEvent) {
+        privateKey.setText("");
+    }
+    public void clearPublicKey(ActionEvent actionEvent) {
+        publicKey.setText("");
+    }
+    public void clearCipher(ActionEvent actionEvent) {
+        cipherArea.setText("");
+    }
+
+    public void selectFile(ActionEvent actionEvent) {
+        File temp;
+        try {
+            temp = selectFile();
+        } catch (NullPointerException e) {
+            showAlert(e.getMessage());
+            return;
+        }
+        currentFile = temp;
+        fileNamePreview.setText(currentFile.getAbsolutePath());
+    }
+
+    public void saveTextToFile(ActionEvent actionEvent) {
+        File selectedFile = selectFileToSave();
+        if (selectedFile == null) {
+            showAlert("Nie wybrano pliku!");
+            return;
+        }
+        try  {
+            writeBytesToFile(currentPlainData, selectedFile);
+            showAlert("Plik zapisany: " + selectedFile.getAbsolutePath());
+        } catch (IOException e) {
+            showAlert("Błąd zapisu do pliku.");
+        }
+    }
+
+    private File selectFileToSave() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Wybierz plik");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Pliki tekstowe", "*.txt"),
+                new FileChooser.ExtensionFilter("Wszystkie pliki", "*.*")
+        );
+        Stage stage = (Stage) fileChoose.getScene().getWindow();
+        File selectedFile = fileChooser.showSaveDialog(stage);
+        if(selectedFile == null) {
+            showAlert("NIe wybrano pliku!");
+        }
+        return selectedFile;
+    }
+
+    public void saveCipherToFile(ActionEvent actionEvent) {
+        File selectedFile = selectFileToSave();
+        try {
+            assert selectedFile != null;
+            try (FileWriter writer = new FileWriter(selectedFile)) {
+                writer.write(cipherArea.getText());
+                showAlert("Plik zapisany: " + selectedFile.getAbsolutePath());
+            }
+        } catch (IOException e) {
+            showAlert("Błąd zapisu do pliku.");
+        }
+    }
+
+    public void readFromFile(ActionEvent actionEvent) {
+        byte [] result;
+        try {
+            result = readBytesFromFile(currentFile);
+            currentPlainData = result;
+            textArea.setText(new String(result));
+
+        } catch (IOException e) {
+            showAlert("Błąd zapisu do pliku.");
+        }
+        catch (NullPointerException e) {
+            showAlert("Wybierz plik!");
+        }
+    }
+
+    private void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Błąd!");
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    public void dataFromKeyboardOption(ActionEvent actionEvent) {
+        textArea.setEditable(true);
+        cipherArea.setEditable(true);
+        textArea.setText("");
+        cipherArea.setText("");
+        fileReader.setDisable(true);
+        cipherReader.setDisable(true);
+    }
+
+    public void dataFromFileOption(ActionEvent actionEvent) {
+        textArea.setEditable(false);
+        cipherArea.setEditable(false);
+        textArea.setText("");
+        cipherArea.setText("");
+        fileReader.setDisable(false);
+        cipherReader.setDisable(false);
+    }
+
+    public void selectDecipherFile(ActionEvent actionEvent) {
+        File tempFile;
+        try {
+            tempFile = selectFile();
+        }
+        catch(NullPointerException e) {
+            showAlert(e.getMessage());
+            return;
+        }
+        currentDecipherFile = tempFile;
+        decipherNamePreview.setText(currentDecipherFile.getAbsolutePath());
+    }
+
+    private File selectFile() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Wybierz plik");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Pliki tekstowe", "*.txt"),
+                new FileChooser.ExtensionFilter("Wszystkie pliki", "*.*")
+        );
+        Stage stage = (Stage) fileChoose.getScene().getWindow();
+        File selectedFile = fileChooser.showOpenDialog(stage);
+        if (selectedFile != null) {
+            System.out.println("Wybrano plik: " + selectedFile.getAbsolutePath());
+        } else {
+            throw new NullPointerException("nie wybrano pliku");
+        }
+        return selectedFile;
+    }
+
+    public void readCipheredData(ActionEvent actionEvent) {
+        String result = "";
+        try {
+            result = new String(readBytesFromFile(currentDecipherFile));
+            cipherArea.setText(result);
+        } catch (IOException e) {
+            showAlert("Błąd odczytu pliku.");
+        }
+        catch (NullPointerException e) {
+            showAlert("Wybierz plik!");
+        }
+    }
 }
