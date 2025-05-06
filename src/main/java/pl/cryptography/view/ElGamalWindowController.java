@@ -107,7 +107,7 @@ public class ElGamalWindowController {
             return;
         }
         try {
-            number = new BigInteger(privateKey.getText());
+            number = new BigInteger(privateKey.getText().getBytes(StandardCharsets.UTF_8));
         } catch (NumberFormatException e) {
             showAlert("Nieprawidłowy format klucza prywatnego!");
         }
@@ -119,7 +119,7 @@ public class ElGamalWindowController {
             return;
         }
         try {
-            number = new BigInteger(publicKey.getText());
+            number = new BigInteger(publicKey.getText().getBytes(StandardCharsets.UTF_8));
         } catch (NumberFormatException e) {
             showAlert("Nieprawidłowy format klucza publicznego!");
         }
@@ -127,8 +127,12 @@ public class ElGamalWindowController {
 
         byte[] bytesToCipher = textArea.getText().getBytes(StandardCharsets.UTF_8);
         Signature signature = elgamal.encipher(bytesToCipher);
-        String text = signature.getR().toString() + signature.getS().toString();
-        cipherArea.setText(text);
+        byte mid = 100;
+        String str = new String(new byte[]{mid}, StandardCharsets.UTF_8);
+        String text1 = new String(signature.getR().toByteArray(), StandardCharsets.UTF_8);
+        String text2 = new String(signature.getS().toByteArray(), StandardCharsets.UTF_8);
+        String output = text1 + str + text2;
+        cipherArea.setText(output);
     }
 
     public void generatePrimeNumber() {
@@ -146,8 +150,10 @@ public class ElGamalWindowController {
 
     public void generatePrivateKey() {
         BigInteger key = elgamal.generatePrivateKey();
+        byte[] bytes = key.toByteArray();
         elgamal.setA(key);
-        privateKey.setText(key.toString());
+        String text = new String(bytes, StandardCharsets.UTF_8);
+        privateKey.setText(text);
     }
 
     public void generatePublicKey() {
@@ -182,7 +188,7 @@ public class ElGamalWindowController {
             return;
         }
         try {
-            number = new BigInteger(privateKey.getText());
+            number = new BigInteger(privateKey.getText().getBytes());
         } catch (NumberFormatException e) {
             showAlert("Nieprawidłowy format klucza prywatnego!");
         }
@@ -190,8 +196,10 @@ public class ElGamalWindowController {
 
 
         BigInteger key = elgamal.generatePublicKey();
+        byte[] bytes = key.toByteArray();
         elgamal.setH(key);
-        publicKey.setText(key.toString());
+        String text = new String(bytes, StandardCharsets.UTF_8);
+        publicKey.setText(text);
     }
 
     public void clearText(ActionEvent actionEvent) {
