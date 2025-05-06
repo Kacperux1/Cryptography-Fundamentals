@@ -28,7 +28,6 @@ public class MainController {
 
 
     public void enterElGamalWindow(ActionEvent actionEvent) {
-        System.out.println("Kliknięto przycisk ElGamal!");
         Stage stage = (Stage) asymEncode.getScene().getWindow();
         FXMLLoader fxmlLoader = new FXMLLoader(CryptographyFundamentals.class.getResource("/pl/cryptography/CiperWindowElGamal.fxml"));
         Scene scene;

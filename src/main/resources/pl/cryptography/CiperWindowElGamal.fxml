@@ -13,7 +13,7 @@
       <TextArea fx:id="textArea" layoutX="22.0" layoutY="334.0" prefHeight="174.0" prefWidth="373.0" />
       <TextArea fx:id="cipherArea" layoutX="611.0" layoutY="334.0" prefHeight="174.0" prefWidth="374.0" />
       <TextField fx:id="primeNumber" layoutX="130.0" layoutY="21.0" prefHeight="26.0" prefWidth="306.0" />
-      <Button layoutX="479.0" layoutY="363.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="65.0" text="podpisz" />
+      <Button layoutX="479.0" layoutY="363.0" mnemonicParsing="false" onAction="#sign" prefHeight="26.0" prefWidth="65.0" text="podpisz" />
       <Button layoutX="479.0" layoutY="443.0" mnemonicParsing="false" text="zweryfikuj" />
       <RadioButton layoutX="74.0" layoutY="198.0" mnemonicParsing="false" onAction="#dataFromFileOption" text="z pliku">
          <toggleGroup>
@@ -34,7 +34,7 @@
       <Button layoutX="740.0" layoutY="537.0" mnemonicParsing="false" onAction="#clearCipher" text="wyczyść" />
       <Button layoutX="398.0" layoutY="274.0" mnemonicParsing="false" onAction="#selectDecipherFile" text="Wybierz plik do deszyfrowania" />
       <Button fx:id="cipherReader" layoutX="626.0" layoutY="287.0" mnemonicParsing="false" onAction="#readCipheredData" text="Wczytaj szyfrogram..." />
-      <Button fx:id="clearKey" layoutX="531.0" layoutY="22.0" mnemonicParsing="false" text="wyczyść" />
+      <Button layoutX="531.0" layoutY="22.0" mnemonicParsing="false" onAction="#clearPrimeNumber" text="wyczyść" />
       <Text layoutX="28.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="liczba pierwsza p:" />
       <Text layoutX="55.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="generator g:" />
       <Text layoutX="34.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="klucz prywatny:" />
@@ -42,9 +42,12 @@
       <TextField fx:id="generator" layoutX="130.0" layoutY="57.0" prefHeight="26.0" prefWidth="306.0" />
       <TextField fx:id="privateKey" layoutX="130.0" layoutY="90.0" prefHeight="26.0" prefWidth="306.0" />
       <TextField fx:id="publicKey" layoutX="130.0" layoutY="126.0" prefHeight="26.0" prefWidth="306.0" />
-      <Button layoutX="451.0" layoutY="21.0" mnemonicParsing="false" text="wygeneruj" />
-      <Button layoutX="451.0" layoutY="58.0" mnemonicParsing="false" text="wygeneruj" />
-      <Button layoutX="451.0" layoutY="91.0" mnemonicParsing="false" text="wygeneruj" />
-      <Button layoutX="451.0" layoutY="126.0" mnemonicParsing="false" text="wygeneruj" />
+      <Button layoutX="451.0" layoutY="21.0" mnemonicParsing="false" onAction="#generatePrimeNumber" text="wygeneruj" />
+      <Button layoutX="451.0" layoutY="58.0" mnemonicParsing="false" onAction="#generateGenerator" text="wygeneruj" />
+      <Button layoutX="451.0" layoutY="91.0" mnemonicParsing="false" onAction="#generatePrivateKey" text="wygeneruj" />
+      <Button layoutX="451.0" layoutY="126.0" mnemonicParsing="false" onAction="#generatePublicKey" text="wygeneruj" />
+      <Button layoutX="531.0" layoutY="57.0" mnemonicParsing="false" onAction="#clearGenerator" text="wyczyść" />
+      <Button layoutX="531.0" layoutY="90.0" mnemonicParsing="false" onAction="#clearPrivateKey" text="wyczyść" />
+      <Button layoutX="531.0" layoutY="126.0" mnemonicParsing="false" onAction="#clearPublicKey" text="wyczyść" />
    </children>
 </AnchorPane>

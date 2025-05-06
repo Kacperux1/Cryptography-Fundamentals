@@ -8,12 +8,14 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-import pl.cryptography.logic.AES;
+import pl.cryptography.DigitalSignature.ElGamal;
+import pl.cryptography.DigitalSignature.Signature;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
@@ -51,7 +53,146 @@ public class ElGamalWindowController {
     private byte[] currentKey;
     private byte[] currentPlainData;
     private byte[] currentCiphered;
+    private ElGamal elgamal;
 
+    public void initialize() {
+        publicKey.setEditable(false);
+        fileNamePreview.setEditable(false);
+        decipherNamePreview.setEditable(false);
+        textArea.setEditable(false);
+        cipherArea.setEditable(false);
+        fileReader.setDisable(true);
+        cipherReader.setDisable(true);
+        elgamal = new ElGamal();
+    }
+
+    public void verify() {
+
+    }
+
+    public void sign() {
+        BigInteger number = new BigInteger("0");
+
+        if(textArea.getText().isEmpty()){
+            showAlert("Brak widomości do szyfrowania!");
+            return;
+        }
+
+        if(primeNumber.getText().isEmpty()){
+            showAlert("Brak liczby pierwszej p!");
+            return;
+        }
+        try {
+            number = new BigInteger(primeNumber.getText());
+        } catch (NumberFormatException e) {
+            showAlert("Nieprawidłowy format liczby pierwszej!");
+        }
+        elgamal.setP(number);
+
+
+        if(generator.getText().isEmpty()) {
+            showAlert("Brak generatora!");
+            return;
+        }
+        try {
+            number = new BigInteger(generator.getText());
+        } catch (NumberFormatException e) {
+            showAlert("Nieprawidłowy format generatora!");
+        }
+        elgamal.setG(number);
+
+
+        if(privateKey.getText().isEmpty()) {
+            showAlert("Brak klucza prywatnego!");
+            return;
+        }
+        try {
+            number = new BigInteger(privateKey.getText());
+        } catch (NumberFormatException e) {
+            showAlert("Nieprawidłowy format klucza prywatnego!");
+        }
+        elgamal.setA(number);
+
+
+        if(publicKey.getText().isEmpty()) {
+            showAlert("Brak klucza publicznego!");
+            return;
+        }
+        try {
+            number = new BigInteger(publicKey.getText());
+        } catch (NumberFormatException e) {
+            showAlert("Nieprawidłowy format klucza publicznego!");
+        }
+        elgamal.setH(number);
+
+        byte[] bytesToCipher = textArea.getText().getBytes(StandardCharsets.UTF_8);
+        Signature signature = elgamal.encipher(bytesToCipher);
+        String text = signature.getR().toString() + signature.getS().toString();
+        cipherArea.setText(text);
+    }
+
+    public void generatePrimeNumber() {
+        BigInteger prime = elgamal.generatePrime(512);
+        elgamal.setP(prime);
+        primeNumber.setText(prime.toString());
+    }
+
+    public void generateGenerator() {
+        int random = (int) (Math.random()*11);
+        BigInteger brandom = BigInteger.valueOf(random);
+        elgamal.setG(brandom);
+        generator.setText(brandom.toString());
+    }
+
+    public void generatePrivateKey() {
+        BigInteger key = elgamal.generatePrivateKey();
+        elgamal.setA(key);
+        privateKey.setText(key.toString());
+    }
+
+    public void generatePublicKey() {
+        BigInteger number = new BigInteger("0");
+
+        if(primeNumber.getText().isEmpty()){
+            showAlert("Brak liczby pierwszej p!");
+            return;
+        }
+        try {
+            number = new BigInteger(primeNumber.getText());
+        } catch (NumberFormatException e) {
+            showAlert("Nieprawidłowy format liczby pierwszej!");
+        }
+        elgamal.setP(number);
+
+
+        if(generator.getText().isEmpty()) {
+            showAlert("Brak generatora!");
+            return;
+        }
+        try {
+            number = new BigInteger(generator.getText());
+        } catch (NumberFormatException e) {
+            showAlert("Nieprawidłowy format generatora!");
+        }
+        elgamal.setG(number);
+
+
+        if(privateKey.getText().isEmpty()) {
+            showAlert("Brak klucza prywatnego!");
+            return;
+        }
+        try {
+            number = new BigInteger(privateKey.getText());
+        } catch (NumberFormatException e) {
+            showAlert("Nieprawidłowy format klucza prywatnego!");
+        }
+        elgamal.setA(number);
+
+
+        BigInteger key = elgamal.generatePublicKey();
+        elgamal.setH(key);
+        publicKey.setText(key.toString());
+    }
 
     public void clearText(ActionEvent actionEvent) {
         textArea.setText("");

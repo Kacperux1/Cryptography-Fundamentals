@@ -15,7 +15,6 @@ public class ElGamal {
     private final int bitLength = 512; // Długość bitów dla liczby p
 
     public ElGamal() {
-
         this.g = new BigInteger("2");  // Generator g,
         this.p = generatePrime(bitLength);  // Liczba pierwsza p
         this.a = generatePrivateKey();  // Klucz prywatny a
@@ -57,7 +56,7 @@ public class ElGamal {
     }
 
 
-    private BigInteger generatePrivateKey() {
+    public BigInteger generatePrivateKey() {
         SecureRandom rand = new SecureRandom();
         // Losowanie klucza prywatnego a z zakresu [1, p-2]
         BigInteger pMinusTwo = p.subtract(BigInteger.TWO);
@@ -69,12 +68,12 @@ public class ElGamal {
     }
 
     // Generowanie klucza publicznego h = g^a mod p
-    private BigInteger generatePublicKey() {
+    public BigInteger generatePublicKey() {
         return g.modPow(a, p);  // g^a mod p
     }
 
     // Funkcja do generowania liczby pierwszej p o zadanej długości bitów
-    private BigInteger generatePrime(int bitLength) {
+    public BigInteger generatePrime(int bitLength) {
         SecureRandom rand = new SecureRandom();
         // Generowanie prawdopodobnej liczby pierwszej
         return new BigInteger(bitLength, 100, rand);
@@ -84,5 +83,21 @@ public class ElGamal {
         return h;
     }
 
+
+    public void setP(BigInteger p) {
+        this.p = p;
+    }
+
+    public void setG(BigInteger g) {
+        this.g = g;
+    }
+
+    public void setA(BigInteger a) {
+        this.a = a;
+    }
+
+    public void setH(BigInteger h) {
+        this.h = h;
+    }
 }
 
