@@ -14,7 +14,7 @@
       <TextArea fx:id="cipherArea" layoutX="611.0" layoutY="334.0" prefHeight="174.0" prefWidth="374.0" />
       <TextField fx:id="primeNumber" layoutX="130.0" layoutY="21.0" prefHeight="26.0" prefWidth="306.0" />
       <Button layoutX="479.0" layoutY="363.0" mnemonicParsing="false" onAction="#sign" prefHeight="26.0" prefWidth="65.0" text="podpisz" />
-      <Button layoutX="479.0" layoutY="443.0" mnemonicParsing="false" text="zweryfikuj" />
+      <Button layoutX="479.0" layoutY="443.0" mnemonicParsing="false" onAction="#verify" text="zweryfikuj" />
       <RadioButton layoutX="74.0" layoutY="198.0" mnemonicParsing="false" onAction="#dataFromFileOption" text="z pliku">
          <toggleGroup>
             <ToggleGroup fx:id="source" />

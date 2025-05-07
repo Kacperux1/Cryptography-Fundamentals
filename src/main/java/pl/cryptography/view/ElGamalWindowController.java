@@ -67,14 +67,15 @@ public class ElGamalWindowController {
     }
 
     public void verify() {
-
-    }
-
-    public void sign() {
         BigInteger number = new BigInteger("0");
 
+        if(cipherArea.getText().isEmpty()){
+            showAlert("Brak podpisu!");
+            return;
+        }
+
         if(textArea.getText().isEmpty()){
-            showAlert("Brak widomości do szyfrowania!");
+            showAlert("Brak widomości do sprawdzenia!");
             return;
         }
 
@@ -107,7 +108,7 @@ public class ElGamalWindowController {
             return;
         }
         try {
-            number = new BigInteger(privateKey.getText().getBytes(StandardCharsets.UTF_8));
+            number = new BigInteger(privateKey.getText());
         } catch (NumberFormatException e) {
             showAlert("Nieprawidłowy format klucza prywatnego!");
         }
@@ -119,7 +120,89 @@ public class ElGamalWindowController {
             return;
         }
         try {
-            number = new BigInteger(publicKey.getText().getBytes(StandardCharsets.UTF_8));
+            number = new BigInteger(publicKey.getText());
+        } catch (NumberFormatException e) {
+            showAlert("Nieprawidłowy format klucza publicznego!");
+        }
+        elgamal.setH(number);
+
+        byte[] bytesToCheck = textArea.getText().getBytes(StandardCharsets.UTF_8);
+
+        String[] parts = cipherArea.getText().split("%");
+        if (parts.length != 2) {
+            showAlert("Niepoprawny format podpisu!");
+            return;
+        }
+        BigInteger r = new BigInteger(parts[0]);
+        BigInteger s = new BigInteger(parts[1]);
+
+        if(elgamal.verify(bytesToCheck, r, s)){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Sprawdzono");
+            alert.setHeaderText(null);
+            alert.setContentText("Podpis Poprawny");
+            alert.showAndWait();
+        }
+        else {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Sprawdzono");
+            alert.setHeaderText(null);
+            alert.setContentText("Podpis NIE Poprawny");
+            alert.showAndWait();
+        }
+    }
+
+
+    public void sign() {
+        BigInteger number = new BigInteger("0");
+
+        if(textArea.getText().isEmpty()){
+            showAlert("Brak widomości do podpisania!");
+            return;
+        }
+
+        if(primeNumber.getText().isEmpty()){
+            showAlert("Brak liczby pierwszej p!");
+            return;
+        }
+        try {
+            number = new BigInteger(primeNumber.getText());
+        } catch (NumberFormatException e) {
+            showAlert("Nieprawidłowy format liczby pierwszej!");
+        }
+        elgamal.setP(number);
+
+
+        if(generator.getText().isEmpty()) {
+            showAlert("Brak generatora!");
+            return;
+        }
+        try {
+            number = new BigInteger(generator.getText());
+        } catch (NumberFormatException e) {
+            showAlert("Nieprawidłowy format generatora!");
+        }
+        elgamal.setG(number);
+
+
+        if(privateKey.getText().isEmpty()) {
+            showAlert("Brak klucza prywatnego!");
+            return;
+        }
+        try {
+            number = new BigInteger(privateKey.getText());
+        } catch (NumberFormatException e) {
+            showAlert("Nieprawidłowy format klucza prywatnego!");
+        }
+        elgamal.setA(number);
+
+
+        if(publicKey.getText().isEmpty()) {
+            showAlert("Brak klucza publicznego!");
+            return;
+        }
+        try {
+            number = new BigInteger(publicKey.getText());
         } catch (NumberFormatException e) {
             showAlert("Nieprawidłowy format klucza publicznego!");
         }
@@ -127,11 +210,7 @@ public class ElGamalWindowController {
 
         byte[] bytesToCipher = textArea.getText().getBytes(StandardCharsets.UTF_8);
         Signature signature = elgamal.encipher(bytesToCipher);
-        byte mid = 100;
-        String str = new String(new byte[]{mid}, StandardCharsets.UTF_8);
-        String text1 = new String(signature.getR().toByteArray(), StandardCharsets.UTF_8);
-        String text2 = new String(signature.getS().toByteArray(), StandardCharsets.UTF_8);
-        String output = text1 + str + text2;
+        String output = signature.getR().toString() + "%" + signature.getS().toString();
         cipherArea.setText(output);
     }
 
@@ -150,10 +229,8 @@ public class ElGamalWindowController {
 
     public void generatePrivateKey() {
         BigInteger key = elgamal.generatePrivateKey();
-        byte[] bytes = key.toByteArray();
         elgamal.setA(key);
-        String text = new String(bytes, StandardCharsets.UTF_8);
-        privateKey.setText(text);
+        privateKey.setText(key.toString());
     }
 
     public void generatePublicKey() {
@@ -188,7 +265,7 @@ public class ElGamalWindowController {
             return;
         }
         try {
-            number = new BigInteger(privateKey.getText().getBytes());
+            number = new BigInteger(privateKey.getText());
         } catch (NumberFormatException e) {
             showAlert("Nieprawidłowy format klucza prywatnego!");
         }
@@ -196,10 +273,8 @@ public class ElGamalWindowController {
 
 
         BigInteger key = elgamal.generatePublicKey();
-        byte[] bytes = key.toByteArray();
         elgamal.setH(key);
-        String text = new String(bytes, StandardCharsets.UTF_8);
-        publicKey.setText(text);
+        publicKey.setText(key.toString());
     }
 
     public void clearText(ActionEvent actionEvent) {
