@@ -210,27 +210,27 @@ public class ElGamalWindowController {
 
         byte[] bytesToCipher = textArea.getText().getBytes(StandardCharsets.UTF_8);
         Signature signature = elgamal.encipher(bytesToCipher);
-        String output = signature.getR().toString() + "%" + signature.getS().toString();
+        String output = signature.getR().toString(16) + "%" + signature.getS().toString(16);
         cipherArea.setText(output);
     }
 
     public void generatePrimeNumber() {
         BigInteger prime = elgamal.generatePrime(512);
         elgamal.setP(prime);
-        primeNumber.setText(prime.toString());
+        primeNumber.setText(prime.toString(16));
     }
 
     public void generateGenerator() {
         int random = (int) (Math.random()*11);
         BigInteger brandom = BigInteger.valueOf(random);
         elgamal.setG(brandom);
-        generator.setText(brandom.toString());
+        generator.setText(brandom.toString(16));
     }
 
     public void generatePrivateKey() {
         BigInteger key = elgamal.generatePrivateKey();
         elgamal.setA(key);
-        privateKey.setText(key.toString());
+        privateKey.setText(key.toString(16));
     }
 
     public void generatePublicKey() {
@@ -274,7 +274,7 @@ public class ElGamalWindowController {
 
         BigInteger key = elgamal.generatePublicKey();
         elgamal.setH(key);
-        publicKey.setText(key.toString());
+        publicKey.setText(key.toString(16));
     }
 
     public void clearText(ActionEvent actionEvent) {
