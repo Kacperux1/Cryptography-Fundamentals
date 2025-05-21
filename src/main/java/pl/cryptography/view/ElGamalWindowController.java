@@ -383,7 +383,6 @@ public class ElGamalWindowController {
     }
 
     public void dataFromFileOption(ActionEvent actionEvent) {
-        textArea.setEditable(false);
         cipherArea.setEditable(false);
         textArea.setText("");
         cipherArea.setText("");
