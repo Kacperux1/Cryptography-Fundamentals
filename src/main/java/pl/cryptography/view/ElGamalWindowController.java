@@ -84,7 +84,7 @@ public class ElGamalWindowController {
             return;
         }
         try {
-            number = new BigInteger(primeNumber.getText());
+            number = new BigInteger(primeNumber.getText(), 16);
         } catch (NumberFormatException e) {
             showAlert("Nieprawidłowy format liczby pierwszej!");
         }
@@ -96,7 +96,7 @@ public class ElGamalWindowController {
             return;
         }
         try {
-            number = new BigInteger(generator.getText());
+            number = new BigInteger(generator.getText(), 16);
         } catch (NumberFormatException e) {
             showAlert("Nieprawidłowy format generatora!");
         }
@@ -108,7 +108,7 @@ public class ElGamalWindowController {
             return;
         }
         try {
-            number = new BigInteger(privateKey.getText());
+            number = new BigInteger(privateKey.getText(), 16);
         } catch (NumberFormatException e) {
             showAlert("Nieprawidłowy format klucza prywatnego!");
         }
@@ -120,7 +120,7 @@ public class ElGamalWindowController {
             return;
         }
         try {
-            number = new BigInteger(publicKey.getText());
+            number = new BigInteger(publicKey.getText(), 16);
         } catch (NumberFormatException e) {
             showAlert("Nieprawidłowy format klucza publicznego!");
         }
@@ -133,8 +133,8 @@ public class ElGamalWindowController {
             showAlert("Niepoprawny format podpisu!");
             return;
         }
-        BigInteger r = new BigInteger(parts[0]);
-        BigInteger s = new BigInteger(parts[1]);
+        BigInteger r = new BigInteger(parts[0],16);
+        BigInteger s = new BigInteger(parts[1], 16);
 
         if(elgamal.verify(bytesToCheck, r, s)){
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -166,7 +166,7 @@ public class ElGamalWindowController {
             return;
         }
         try {
-            number = new BigInteger(primeNumber.getText());
+            number = new BigInteger(primeNumber.getText(), 16);
         } catch (NumberFormatException e) {
             showAlert("Nieprawidłowy format liczby pierwszej!");
         }
@@ -178,7 +178,7 @@ public class ElGamalWindowController {
             return;
         }
         try {
-            number = new BigInteger(generator.getText());
+            number = new BigInteger(generator.getText(), 16);
         } catch (NumberFormatException e) {
             showAlert("Nieprawidłowy format generatora!");
         }
@@ -190,7 +190,7 @@ public class ElGamalWindowController {
             return;
         }
         try {
-            number = new BigInteger(privateKey.getText());
+            number = new BigInteger(privateKey.getText(), 16);
         } catch (NumberFormatException e) {
             showAlert("Nieprawidłowy format klucza prywatnego!");
         }
@@ -202,7 +202,7 @@ public class ElGamalWindowController {
             return;
         }
         try {
-            number = new BigInteger(publicKey.getText());
+            number = new BigInteger(publicKey.getText(), 16);
         } catch (NumberFormatException e) {
             showAlert("Nieprawidłowy format klucza publicznego!");
         }
@@ -241,7 +241,7 @@ public class ElGamalWindowController {
             return;
         }
         try {
-            number = new BigInteger(primeNumber.getText());
+            number = new BigInteger(primeNumber.getText(), 16);
         } catch (NumberFormatException e) {
             showAlert("Nieprawidłowy format liczby pierwszej!");
         }
@@ -253,7 +253,7 @@ public class ElGamalWindowController {
             return;
         }
         try {
-            number = new BigInteger(generator.getText());
+            number = new BigInteger(generator.getText(), 16);
         } catch (NumberFormatException e) {
             showAlert("Nieprawidłowy format generatora!");
         }
@@ -265,7 +265,7 @@ public class ElGamalWindowController {
             return;
         }
         try {
-            number = new BigInteger(privateKey.getText());
+            number = new BigInteger(privateKey.getText(), 16);
         } catch (NumberFormatException e) {
             showAlert("Nieprawidłowy format klucza prywatnego!");
         }
