@@ -59,7 +59,6 @@ public class ElGamalWindowController {
         publicKey.setEditable(false);
         fileNamePreview.setEditable(false);
         decipherNamePreview.setEditable(false);
-        textArea.setEditable(false);
         cipherArea.setEditable(false);
         fileReader.setDisable(true);
         cipherReader.setDisable(true);
@@ -215,16 +214,15 @@ public class ElGamalWindowController {
     }
 
     public void generatePrimeNumber() {
-        BigInteger prime = elgamal.generatePrime(512);
+        BigInteger prime = elgamal.generatePrime();
         elgamal.setP(prime);
         primeNumber.setText(prime.toString(16));
     }
 
     public void generateGenerator() {
-        int random = (int) (Math.random()*11);
-        BigInteger brandom = BigInteger.valueOf(random);
-        elgamal.setG(brandom);
-        generator.setText(brandom.toString(16));
+        BigInteger grandom = elgamal.generateG();
+        elgamal.setG(grandom);
+        generator.setText(grandom.toString(16));
     }
 
     public void generatePrivateKey() {
@@ -383,7 +381,6 @@ public class ElGamalWindowController {
     }
 
     public void dataFromFileOption(ActionEvent actionEvent) {
-        cipherArea.setEditable(false);
         textArea.setText("");
         cipherArea.setText("");
         fileReader.setDisable(false);

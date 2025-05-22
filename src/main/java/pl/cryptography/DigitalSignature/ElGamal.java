@@ -2,6 +2,7 @@ package pl.cryptography.DigitalSignature;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.util.Random;
 
 
 //lepiej chyba zeby juz w metodzie podawac a nie jako pole
@@ -15,10 +16,7 @@ public class ElGamal {
     private final int bitLength = 512; // Długość bitów dla liczby p
 
     public ElGamal() {
-        this.g = new BigInteger("2");  // Generator g,
-        this.p = generatePrime(bitLength);  // Liczba pierwsza p
-        this.a = generatePrivateKey();  // Klucz prywatny a
-        this.h = generatePublicKey();  // Klucz publiczny h = g^a mod p
+
     }
 
     public Signature encipher(byte[] data) {
@@ -73,10 +71,15 @@ public class ElGamal {
     }
 
     // Funkcja do generowania liczby pierwszej p o zadanej długości bitów
-    public BigInteger generatePrime(int bitLength) {
+    public BigInteger generatePrime() {
         SecureRandom rand = new SecureRandom();
         // Generowanie prawdopodobnej liczby pierwszej
         return new BigInteger(bitLength, 100, rand);
+    }
+
+    public BigInteger generateG() {
+        SecureRandom rand = new SecureRandom();
+        return new BigInteger(bitLength-2,  rand);
     }
 
     public BigInteger getPublicKey() {

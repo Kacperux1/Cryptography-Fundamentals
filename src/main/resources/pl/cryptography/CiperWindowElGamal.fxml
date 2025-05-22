@@ -21,19 +21,19 @@
          </toggleGroup>
       </RadioButton>
       <RadioButton layoutX="74.0" layoutY="235.0" mnemonicParsing="false" onAction="#dataFromKeyboardOption" text="z klawiatury" toggleGroup="$source" />
-      <Button fx:id="fileChoose" layoutX="398.0" layoutY="222.0" mnemonicParsing="false" onAction="#selectFile" prefHeight="26.0" prefWidth="178.0" text="wybierz plik do szyfrowania" />
-      <Text layoutX="611.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aktualnie wybrany plik do szyfrowania..." />
+      <Button fx:id="fileChoose" layoutX="398.0" layoutY="222.0" mnemonicParsing="false" onAction="#selectFile" prefHeight="26.0" prefWidth="178.0" text="wybierz plik z wiadomością..." />
+      <Text layoutX="611.0" layoutY="83.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aktualnie wybrany plik z wiadomością..." />
       <Text layoutX="74.0" layoutY="177.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dane należy pobrać..." />
-      <Text layoutX="611.0" layoutY="186.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aktualnie wybrany plik do deszyfrowania..." />
+      <Text layoutX="611.0" layoutY="186.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Aktualnie wybrany plik z podpisem..." />
       <TextField fx:id="decipherNamePreview" layoutX="610.0" layoutY="222.0" prefHeight="26.0" prefWidth="210.0" />
       <TextField fx:id="fileNamePreview" layoutX="610.0" layoutY="118.0" prefHeight="26.0" prefWidth="210.0" />
       <Button fx:id="textSaver" layoutX="215.0" layoutY="274.0" mnemonicParsing="false" onAction="#saveTextToFile" text="zapisz tekst..." />
-      <Button fx:id="cipherFileSaver" layoutX="798.0" layoutY="287.0" mnemonicParsing="false" onAction="#saveCipherToFile" text="zapisz szyfrogram..." />
+      <Button fx:id="cipherFileSaver" layoutX="798.0" layoutY="287.0" mnemonicParsing="false" onAction="#saveCipherToFile" text="zapisz podpis..." />
       <Button fx:id="fileReader" layoutX="87.0" layoutY="274.0" mnemonicParsing="false" onAction="#readFromFile" text="Wczytaj z pliku..." />
       <Button layoutX="186.0" layoutY="537.0" mnemonicParsing="false" onAction="#clearText" text="wyczyść" />
       <Button layoutX="740.0" layoutY="537.0" mnemonicParsing="false" onAction="#clearCipher" text="wyczyść" />
-      <Button layoutX="398.0" layoutY="274.0" mnemonicParsing="false" onAction="#selectDecipherFile" text="Wybierz plik do deszyfrowania" />
-      <Button fx:id="cipherReader" layoutX="626.0" layoutY="287.0" mnemonicParsing="false" onAction="#readCipheredData" text="Wczytaj szyfrogram..." />
+      <Button layoutX="398.0" layoutY="274.0" mnemonicParsing="false" onAction="#selectDecipherFile" text="Wybierz plik z podpisem..." />
+      <Button fx:id="cipherReader" layoutX="626.0" layoutY="287.0" mnemonicParsing="false" onAction="#readCipheredData" text="Wczytaj podpis..." />
       <Button layoutX="531.0" layoutY="22.0" mnemonicParsing="false" onAction="#clearPrimeNumber" text="wyczyść" />
       <Text layoutX="28.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="liczba pierwsza p:" />
       <Text layoutX="55.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="generator g:" />
