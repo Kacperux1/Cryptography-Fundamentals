@@ -59,7 +59,7 @@ public class ElGamalWindowController {
         publicKey.setEditable(false);
         fileNamePreview.setEditable(false);
         decipherNamePreview.setEditable(false);
-        cipherArea.setEditable(false);
+        cipherArea.setEditable(true);
         fileReader.setDisable(true);
         cipherReader.setDisable(true);
         primeNumber.setEditable(false);
