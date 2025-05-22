@@ -62,23 +62,27 @@ public class ElGamalWindowController {
         cipherArea.setEditable(false);
         fileReader.setDisable(true);
         cipherReader.setDisable(true);
+        primeNumber.setEditable(false);
+        generator.setEditable(false);
+        privateKey.setEditable(false);
+        publicKey.setEditable(false);
         elgamal = new ElGamal();
     }
 
     public void verify() {
         BigInteger number = new BigInteger("0");
 
-        if(cipherArea.getText().isEmpty()){
+        if (cipherArea.getText().isEmpty()) {
             showAlert("Brak podpisu!");
             return;
         }
 
-        if(textArea.getText().isEmpty()){
+        if (textArea.getText().isEmpty()) {
             showAlert("Brak widomości do sprawdzenia!");
             return;
         }
 
-        if(primeNumber.getText().isEmpty()){
+        if (primeNumber.getText().isEmpty()) {
             showAlert("Brak liczby pierwszej p!");
             return;
         }
@@ -90,7 +94,7 @@ public class ElGamalWindowController {
         elgamal.setP(number);
 
 
-        if(generator.getText().isEmpty()) {
+        if (generator.getText().isEmpty()) {
             showAlert("Brak generatora!");
             return;
         }
@@ -102,7 +106,7 @@ public class ElGamalWindowController {
         elgamal.setG(number);
 
 
-        if(privateKey.getText().isEmpty()) {
+        if (privateKey.getText().isEmpty()) {
             showAlert("Brak klucza prywatnego!");
             return;
         }
@@ -114,7 +118,7 @@ public class ElGamalWindowController {
         elgamal.setA(number);
 
 
-        if(publicKey.getText().isEmpty()) {
+        if (publicKey.getText().isEmpty()) {
             showAlert("Brak klucza publicznego!");
             return;
         }
@@ -132,17 +136,16 @@ public class ElGamalWindowController {
             showAlert("Niepoprawny format podpisu!");
             return;
         }
-        BigInteger r = new BigInteger(parts[0],16);
+        BigInteger r = new BigInteger(parts[0], 16);
         BigInteger s = new BigInteger(parts[1], 16);
 
-        if(elgamal.verify(bytesToCheck, r, s)){
+        if (elgamal.verify(bytesToCheck, r, s)) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Sprawdzono");
             alert.setHeaderText(null);
             alert.setContentText("Podpis Poprawny");
             alert.showAndWait();
-        }
-        else {
+        } else {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Sprawdzono");
             alert.setHeaderText(null);
@@ -155,12 +158,12 @@ public class ElGamalWindowController {
     public void sign() {
         BigInteger number = new BigInteger("0");
 
-        if(textArea.getText().isEmpty()){
+        if (textArea.getText().isEmpty()) {
             showAlert("Brak widomości do podpisania!");
             return;
         }
 
-        if(primeNumber.getText().isEmpty()){
+        if (primeNumber.getText().isEmpty()) {
             showAlert("Brak liczby pierwszej p!");
             return;
         }
@@ -172,7 +175,7 @@ public class ElGamalWindowController {
         elgamal.setP(number);
 
 
-        if(generator.getText().isEmpty()) {
+        if (generator.getText().isEmpty()) {
             showAlert("Brak generatora!");
             return;
         }
@@ -184,7 +187,7 @@ public class ElGamalWindowController {
         elgamal.setG(number);
 
 
-        if(privateKey.getText().isEmpty()) {
+        if (privateKey.getText().isEmpty()) {
             showAlert("Brak klucza prywatnego!");
             return;
         }
@@ -196,7 +199,7 @@ public class ElGamalWindowController {
         elgamal.setA(number);
 
 
-        if(publicKey.getText().isEmpty()) {
+        if (publicKey.getText().isEmpty()) {
             showAlert("Brak klucza publicznego!");
             return;
         }
@@ -213,28 +216,28 @@ public class ElGamalWindowController {
         cipherArea.setText(output);
     }
 
-    public void generatePrimeNumber() {
+    private void generatePrimeNumber() {
         BigInteger prime = elgamal.generatePrime();
         elgamal.setP(prime);
         primeNumber.setText(prime.toString(16));
     }
 
-    public void generateGenerator() {
+    private void generateGenerator() {
         BigInteger grandom = elgamal.generateG();
         elgamal.setG(grandom);
         generator.setText(grandom.toString(16));
     }
 
-    public void generatePrivateKey() {
+    private void generatePrivateKey() {
         BigInteger key = elgamal.generatePrivateKey();
         elgamal.setA(key);
         privateKey.setText(key.toString(16));
     }
 
-    public void generatePublicKey() {
+    private void generatePublicKey() {
         BigInteger number = new BigInteger("0");
 
-        if(primeNumber.getText().isEmpty()){
+        if (primeNumber.getText().isEmpty()) {
             showAlert("Brak liczby pierwszej p!");
             return;
         }
@@ -246,7 +249,7 @@ public class ElGamalWindowController {
         elgamal.setP(number);
 
 
-        if(generator.getText().isEmpty()) {
+        if (generator.getText().isEmpty()) {
             showAlert("Brak generatora!");
             return;
         }
@@ -258,7 +261,7 @@ public class ElGamalWindowController {
         elgamal.setG(number);
 
 
-        if(privateKey.getText().isEmpty()) {
+        if (privateKey.getText().isEmpty()) {
             showAlert("Brak klucza prywatnego!");
             return;
         }
@@ -278,18 +281,7 @@ public class ElGamalWindowController {
     public void clearText(ActionEvent actionEvent) {
         textArea.setText("");
     }
-    public void clearPrimeNumber(ActionEvent actionEvent) {
-        primeNumber.setText("");
-    }
-    public void clearGenerator(ActionEvent actionEvent) {
-        generator.setText("");
-    }
-    public void clearPrivateKey(ActionEvent actionEvent) {
-        privateKey.setText("");
-    }
-    public void clearPublicKey(ActionEvent actionEvent) {
-        publicKey.setText("");
-    }
+
     public void clearCipher(ActionEvent actionEvent) {
         cipherArea.setText("");
     }
@@ -312,7 +304,7 @@ public class ElGamalWindowController {
             showAlert("Nie wybrano pliku!");
             return;
         }
-        try  {
+        try {
             writeBytesToFile(currentPlainData, selectedFile);
             showAlert("Plik zapisany: " + selectedFile.getAbsolutePath());
         } catch (IOException e) {
@@ -329,7 +321,7 @@ public class ElGamalWindowController {
         );
         Stage stage = (Stage) fileChoose.getScene().getWindow();
         File selectedFile = fileChooser.showSaveDialog(stage);
-        if(selectedFile == null) {
+        if (selectedFile == null) {
             showAlert("NIe wybrano pliku!");
         }
         return selectedFile;
@@ -349,7 +341,7 @@ public class ElGamalWindowController {
     }
 
     public void readFromFile(ActionEvent actionEvent) {
-        byte [] result;
+        byte[] result;
         try {
             result = readBytesFromFile(currentFile);
             currentPlainData = result;
@@ -357,8 +349,7 @@ public class ElGamalWindowController {
 
         } catch (IOException e) {
             showAlert("Błąd zapisu do pliku.");
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             showAlert("Wybierz plik!");
         }
     }
@@ -391,8 +382,7 @@ public class ElGamalWindowController {
         File tempFile;
         try {
             tempFile = selectFile();
-        }
-        catch(NullPointerException e) {
+        } catch (NullPointerException e) {
             showAlert(e.getMessage());
             return;
         }
@@ -424,9 +414,23 @@ public class ElGamalWindowController {
             cipherArea.setText(result);
         } catch (IOException e) {
             showAlert("Błąd odczytu pliku.");
-        }
-        catch (NullPointerException e) {
+        } catch (NullPointerException e) {
             showAlert("Wybierz plik!");
         }
+    }
+
+    public void generateKeys(ActionEvent actionEvent) {
+        generatePrimeNumber();
+        generateGenerator();
+        generatePrivateKey();
+        generatePublicKey();
+    }
+
+    public void clearKeys(ActionEvent actionEvent) {
+        primeNumber.setText("");
+        generator.setText("");
+        privateKey.setText("");
+        publicKey.setText("");
+
     }
 }

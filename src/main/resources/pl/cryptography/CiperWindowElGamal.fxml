@@ -34,20 +34,14 @@
       <Button layoutX="740.0" layoutY="537.0" mnemonicParsing="false" onAction="#clearCipher" text="wyczyść" />
       <Button layoutX="398.0" layoutY="274.0" mnemonicParsing="false" onAction="#selectDecipherFile" text="Wybierz plik z podpisem..." />
       <Button fx:id="cipherReader" layoutX="626.0" layoutY="287.0" mnemonicParsing="false" onAction="#readCipheredData" text="Wczytaj podpis..." />
-      <Button layoutX="531.0" layoutY="22.0" mnemonicParsing="false" onAction="#clearPrimeNumber" text="wyczyść" />
       <Text layoutX="28.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="liczba pierwsza p:" />
       <Text layoutX="55.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="generator g:" />
       <Text layoutX="34.0" layoutY="108.0" strokeType="OUTSIDE" strokeWidth="0.0" text="klucz prywatny:" />
-      <Text layoutX="33.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="klucz publiczny:" />
+      <Text layoutX="22.0" layoutY="144.0" strokeType="OUTSIDE" strokeWidth="0.0" text="klucz publiczny h:" wrappingWidth="96.0" />
       <TextField fx:id="generator" layoutX="130.0" layoutY="57.0" prefHeight="26.0" prefWidth="306.0" />
       <TextField fx:id="privateKey" layoutX="130.0" layoutY="90.0" prefHeight="26.0" prefWidth="306.0" />
       <TextField fx:id="publicKey" layoutX="130.0" layoutY="126.0" prefHeight="26.0" prefWidth="306.0" />
-      <Button layoutX="451.0" layoutY="21.0" mnemonicParsing="false" onAction="#generatePrimeNumber" text="wygeneruj" />
-      <Button layoutX="451.0" layoutY="58.0" mnemonicParsing="false" onAction="#generateGenerator" text="wygeneruj" />
-      <Button layoutX="451.0" layoutY="91.0" mnemonicParsing="false" onAction="#generatePrivateKey" text="wygeneruj" />
-      <Button layoutX="451.0" layoutY="126.0" mnemonicParsing="false" onAction="#generatePublicKey" text="wygeneruj" />
-      <Button layoutX="531.0" layoutY="57.0" mnemonicParsing="false" onAction="#clearGenerator" text="wyczyść" />
-      <Button layoutX="531.0" layoutY="90.0" mnemonicParsing="false" onAction="#clearPrivateKey" text="wyczyść" />
-      <Button layoutX="531.0" layoutY="126.0" mnemonicParsing="false" onAction="#clearPublicKey" text="wyczyść" />
+      <Button layoutX="447.0" layoutY="30.0" mnemonicParsing="false" onAction="#generateKeys" prefHeight="26.0" prefWidth="112.0" text=" wygeneruj klucze" />
+      <Button layoutX="455.0" layoutY="77.0" mnemonicParsing="false" onAction="#clearKeys" prefHeight="26.0" prefWidth="96.0" text="wyczyść klucze" />
    </children>
 </AnchorPane>
