@@ -2,7 +2,7 @@ package pl.cryptography.DigitalSignature;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
-import java.util.Random;
+
 
 
 //lepiej chyba zeby juz w metodzie podawac a nie jako pole
@@ -64,7 +64,7 @@ public class ElGamal {
         BigInteger pMinusTwo = p.subtract(BigInteger.TWO);
         BigInteger a;
         do {
-            a = new BigInteger(p.bitLength() - 1, rand);  // Generowanie liczby z odpowiedniej długości bitów
+            a = new BigInteger(p.bitLength() - 2, rand);  // Generowanie liczby z odpowiedniej długości bitów
         } while (a.compareTo(BigInteger.ONE) < 0 || a.compareTo(pMinusTwo) > 0);
         return a;
     }
