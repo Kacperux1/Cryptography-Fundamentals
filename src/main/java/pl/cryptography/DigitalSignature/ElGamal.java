@@ -28,13 +28,17 @@ public class ElGamal {
         BigInteger r;
         BigInteger s;
 
-        do {
-            k = new BigInteger(p.bitLength() - 1, rand);
-        } while (k.gcd(p.subtract(BigInteger.ONE)).compareTo(BigInteger.ONE) != 0); // Zapewnienie, że k jest względnie pierwsze z p-1
 
         do {
-            r = g.modPow(k, p).mod(p.subtract(BigInteger.ONE));
-        } while (r.equals(BigInteger.ZERO));  // Zapewnienie, że r != 0
+            // losuj k takie, że gcd(k, p-1) == 1
+            do {
+                k = new BigInteger(p.bitLength() - 1, rand);
+            } while (!k.gcd(p.subtract(BigInteger.ONE)).equals(BigInteger.ONE)); //zapewnienie , ze k jest wzglednie pierwsze
+
+            r = g.modPow(k, p).mod(p.subtract(BigInteger.ONE)); //oblicz r
+
+        } while (r.equals(BigInteger.ZERO)); // jeśli r = 0, losuj nowe k i próbuj od nowa
+
 
         BigInteger kInverse = k.modInverse(p.subtract(BigInteger.ONE));  // Odwrotność k mod (p-1)
         s = kInverse.multiply(hash.subtract(a.multiply(r))).mod(p.subtract(BigInteger.ONE));  // s = k^(-1) * (H(m) - a * r)
